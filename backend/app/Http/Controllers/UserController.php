@@ -34,7 +34,7 @@ class UserController extends Controller
             }
         }
 
-        public function store(Request $request){
+        public function register(Request $request){
             $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
@@ -50,6 +50,16 @@ class UserController extends Controller
             return response()->json([
                 'message' => 'User created successfully',
                 'user' => $user,
+            ]);
+        }
+
+        public function logout(Request $request)
+        {
+            $user = Auth::user();
+            $user->tokens()->delete();
+        
+            return response()->json([
+                'message' => 'Logout successful',
             ]);
         }
     
