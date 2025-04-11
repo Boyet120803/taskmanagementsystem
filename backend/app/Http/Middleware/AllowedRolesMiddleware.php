@@ -13,8 +13,21 @@ class AllowedRolesMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle($request, Closure $next, ...$roles)
     {
-        return $next($request);
+        $user = $request->user();
+    
+        if ($user->role == 0) {
+            return $next($request);
+        }
+        if ($user->role == 1) {
+            return $next($request);
+        }
+        if ($user->role == 2) {
+            return $next($request);
+        }
+        return response()->json(['message' => 'Access denied'], 403);
     }
+    
+
 }

@@ -8,28 +8,27 @@
 </head>
 <body class="bg-light d-flex align-items-center justify-content-center" style="height: 100vh;">
 
-    <div class="card p-4 shadow" style="width: 100%; max-width: 400px;">
-        <h4 class="text-center mb-3">Login</h4>
-        <form id="loginForm">
-          <div class="mb-3">
-            <label for="email" class="form-label">Email Address</label>
-            <input type="email" class="form-control" id="email" required />
-          </div>
-          <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" required />
-          </div>
-          <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
-        </form>
-      
-        <div class="d-flex justify-content-between">
-          <a href="register.html" class="btn btn-link p-0">Don't have an account?</a>
-          <a href="" class="btn btn-link p-0">Forgot password?</a>
-        </div>
-      
-        <div id="message" class="mt-3 text-center"></div>
+  <div class="card p-4 shadow" style="width: 100%; max-width: 400px;">
+    <h4 class="text-center mb-3">Login</h4>
+    <form id="loginForm">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email Address</label>
+        <input type="email" class="form-control" id="email" required />
       </div>
-      
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" required />
+      </div>
+      <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
+    </form>
+
+    <div class="d-flex justify-content-between">
+      <a href="register.html" class="btn btn-link p-0">Don't have an account?</a>
+      <a href="#" class="btn btn-link p-0">Forgot password?</a>
+    </div>
+
+    <div id="message" class="mt-3 text-center"></div>
+  </div>
 
   <script>
     document.getElementById('loginForm').addEventListener('submit', async function (e) {
@@ -38,12 +37,6 @@
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       const message = document.getElementById('message');
-      const token = localStorage.getItem('auth_token');
-
-    if (token) {
-      // If token exists, redirect to the dashboard
-      window.location.href = 'dashboard.html';
-    }
   
       try {
         const response = await fetch('http://127.0.0.1:8000/api/login', {
@@ -58,14 +51,20 @@
         const data = await response.json();
   
         if (response.ok) {
-          message.innerHTML = `<span class="text-success">${data.message}</span>`;
-  
-          // Save token (optional)
           localStorage.setItem('auth_token', data.token);
+          localStorage.setItem('user_role', data.role);
   
-          // Redirect to dashboard after 1 second
+          message.innerHTML = `<span class="text-success">${data.message}</span>`;
           setTimeout(() => {
-            window.location.href = 'dashboard.html';
+            if (data.role === 0) {
+              window.location.href = 'admindashboard.php';
+            } else if (data.role === 1) {
+              window.location.href = 'managerdashboard.php';
+            } else if (data.role === 2) {
+              window.location.href = 'regularuserdashboard.php';
+            } else {
+              message.innerHTML = `<span class="text-danger">Unknown role.</span>`;
+            }
           }, 1000);
         } else {
           message.innerHTML = `<span class="text-danger">${data.message}</span>`;
@@ -75,6 +74,7 @@
       }
     });
   </script>
+  
 
 </body>
 </html>

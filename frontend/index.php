@@ -16,12 +16,10 @@
   </div>
 
   <script>
-    // Check if the user is already logged in
     const token = localStorage.getItem('auth_token');
 
     if (token) {
-      // If no token, redirect to login page
-      window.location.href = 'dashboard.html';
+      window.location.href = 'admindashboard.php';
     }
   </script>
 </body>
