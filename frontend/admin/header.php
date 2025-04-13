@@ -13,31 +13,38 @@
   
 
   <style>
+
+    body{
+      background-color: #1c1c27;
+    }
     .sidebar {
       height: 100vh;
       position: fixed;
       top: 0;
       left: 0;
       width: 250px;
-      background-color: #343a40;
+      background-color: #21242e;
       padding-top: 20px;
       z-index: 1;
       box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.4);
     }
     .sidebar a {
-      color: white;
+      color: #ffffff;
       padding: 12px;
       text-decoration: none;
       display: block;
       font-size: 16px;
       
     }
+    .sidebar h2{
+      color:#ffffff;
+    }
     .sidebar a:hover {
       background-color: #575757;
     }
 
     .navbar {
-      background-color: #343a40;
+      background-color: #21242e;
       position: fixed; 
       top: 0; 
       left: 250px; 
@@ -51,11 +58,18 @@
       margin-left: 250px; 
       margin-top: 60px; 
       padding: 20px;
+      
     }
 
     
     .container {
       max-width: 1200px;
+      color: #ffffff;
+    }
+
+    .table{
+      background-color: #1c1c27;
+     
     }
   </style>
 </head>

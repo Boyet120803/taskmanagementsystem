@@ -4,9 +4,7 @@
 <?php require_once ('regularuser/js.php') ?>
 <?php require_once ('regularuser/footer.php') ?>
 
-<!-- Main Content Area -->
 <div class="main-content">
-    <!-- Dashboard Content  -->
     <div class="container mt-4">
       <h1>Profile Page</h1>
      

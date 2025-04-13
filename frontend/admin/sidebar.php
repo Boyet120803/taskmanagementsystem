@@ -1,6 +1,6 @@
   <!-- Sidebar -->
   <div class="sidebar">
-    <h2 class="text-center text-white">Admin</h2>
+    <h2 class="text-center ">Admin</h2>
     <a href="admindashboard.php">Dashboard</a>
     <a href="adminmenuusers.php">Users</a>
     <a href="adminmenutask.php">Tasks</a>

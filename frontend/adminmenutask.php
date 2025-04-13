@@ -65,7 +65,7 @@ async function fetchTasks() {
   if (!taskTableBody) return;
 
   try {
-    const response = await fetch('http://127.0.0.1:8000/api/tasks', {
+    const response = await fetch('http://tms.bdedal.online/api/tasks', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -113,7 +113,7 @@ document.getElementById('addTaskForm').addEventListener('submit', async function
   };
 
   try {
-    const response = await fetch('http://127.0.0.1:8000/api/tasks', {
+    const response = await fetch('http://tms.bdedal.online/api/tasks', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,  
