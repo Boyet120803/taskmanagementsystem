@@ -31,50 +31,51 @@
   </div>
 
   <script>
-    document.getElementById('loginForm').addEventListener('submit', async function (e) {
-      e.preventDefault();
-  
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const message = document.getElementById('message');
-  
-      try {
-        const response = await fetch('http://127.0.0.1:8000/api/login', {
+      document.getElementById('loginForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+    
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const message = document.getElementById('message');
+    
+        fetch('http://127.0.0.1:8000/api/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
           },
-          body: JSON.stringify({ email, password })
+          body: JSON.stringify({ email: email, password: password })
+        })
+        .then(response => response.json().then(data => ({ status: response.status, ok: response.ok, body: data })))
+        .then(result => {
+          const data = result.body;
+    
+          if (result.ok) {
+            localStorage.setItem('auth_token', data.token);
+            localStorage.setItem('user_role', data.role);
+    
+            message.innerHTML = `<span class="text-success">${data.message}</span>`;
+            
+            setTimeout(() => {
+              if (data.role === 0) {
+                window.location.href = 'admindashboard.php';
+              } else if (data.role === 1) {
+                window.location.href = 'managerdashboard.php';
+              } else if (data.role === 2) {
+                window.location.href = 'regularuserdashboard.php';
+              } else {
+                message.innerHTML = `<span class="text-danger">Unknown role.</span>`;
+              }
+            }, 1000);
+          } else {
+            message.innerHTML = `<span class="text-danger">${data.message}</span>`;
+          }
+        })
+        .catch(error => {
+          message.innerHTML = `<span class="text-danger">Error: ${error.message}</span>`;
         });
-  
-        const data = await response.json();
-  
-        if (response.ok) {
-          localStorage.setItem('auth_token', data.token);
-          localStorage.setItem('user_role', data.role);
-  
-          message.innerHTML = `<span class="text-success">${data.message}</span>`;
-          setTimeout(() => {
-            if (data.role === 0) {
-              window.location.href = 'admindashboard.php';
-            } else if (data.role === 1) {
-              window.location.href = 'managerdashboard.php';
-            } else if (data.role === 2) {
-              window.location.href = 'regularuserdashboard.php';
-            } else {
-              message.innerHTML = `<span class="text-danger">Unknown role.</span>`;
-            }
-          }, 1000);
-        } else {
-          message.innerHTML = `<span class="text-danger">${data.message}</span>`;
-        }
-      } catch (error) {
-        message.innerHTML = `<span class="text-danger">Error: ${error.message}</span>`;
-      }
-    });
+      });
   </script>
-  
 
 </body>
 </html>
