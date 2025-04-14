@@ -122,7 +122,7 @@
     const tableBody = document.querySelector('#usersTable tbody');
     if (!tableBody) return;
 
-    fetch('http://tms.bdedal.online/api/users', {
+    fetch('http://127.0.0.1:8000/api/users', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json'
@@ -177,7 +177,7 @@
       role: document.getElementById('role').value
     };
 
-    fetch('http://tms.bdedal.online/api/register', {
+    fetch('http://127.0.0.1:8000/api/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

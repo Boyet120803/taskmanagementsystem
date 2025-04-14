@@ -78,54 +78,57 @@
   </div>
 
   <script>
-    document.getElementById('registerForm').addEventListener('submit', async function (e) {
-      e.preventDefault();
-      
-      const data = {
-        fname: document.getElementById('fname').value,
-        mname: document.getElementById('mname').value,
-        lname: document.getElementById('lname').value,
-        gender: document.getElementById('gender').value,
-        birthdate: document.getElementById('birthdate').value,
-        age: document.getElementById('age').value,
-        contact: document.getElementById('contact').value,
-        address: document.getElementById('address').value,
-        email: document.getElementById('email').value,
-        password: document.getElementById('password').value,
-        password_confirmation: document.getElementById('password_confirmation').value,
-        role: document.getElementById('role').value
-      };
+  document.getElementById('registerForm').addEventListener('submit', function (e) {
+    e.preventDefault();
 
-      const message = document.getElementById('message');
+    const data = {
+      fname: document.getElementById('fname').value,
+      mname: document.getElementById('mname').value,
+      lname: document.getElementById('lname').value,
+      gender: document.getElementById('gender').value,
+      birthdate: document.getElementById('birthdate').value,
+      age: document.getElementById('age').value,
+      contact: document.getElementById('contact').value,
+      address: document.getElementById('address').value,
+      email: document.getElementById('email').value,
+      password: document.getElementById('password').value,
+      password_confirmation: document.getElementById('password_confirmation').value,
+      role: document.getElementById('role').value
+    };
 
-      try {
-        const response = await fetch('http://tms.bdedal.online/api/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify(data)
-        });
+    const message = document.getElementById('message');
 
-        const result = await response.json();
+    fetch('http://127.0.0.1:8000/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json().then(result => ({ ok: response.ok, body: result })))
+    .then(result => {
+      const data = result.body;
 
-        if (response.ok) {
-          message.innerHTML = `<span class="text-success">${result.message}</span>`;
-          setTimeout(() => {
-            window.location.href = "login.html";
-          }, 800);
-        } else {
-          let errorMessages = '';
-          for (let key in result.errors) {
-            errorMessages += result.errors[key].join('<br>') + '<br>';
-          }
-          message.innerHTML = `<span class="text-danger">${errorMessages}</span>`;
+      if (result.ok) {
+        message.innerHTML = `<span class="text-success">${data.message}</span>`;
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 800);
+      } else {
+        let errorMessages = '';
+        for (let key in data.errors) {
+          errorMessages += data.errors[key].join('<br>') + '<br>';
         }
-      } catch (error) {
-        message.innerHTML = `<span class="text-danger">Error: ${error.message}</span>`;
+        message.innerHTML = `<span class="text-danger">${errorMessages}</span>`;
       }
+    })
+    .catch(error => {
+      message.innerHTML = `<span class="text-danger">Error: ${error.message}</span>`;
     });
+  });
+</script>
+
   </script>
 
 </body>
