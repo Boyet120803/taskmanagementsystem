@@ -116,7 +116,7 @@
     }
   }
 
-  // Load users
+
   function loadUsers() {
     const token = localStorage.getItem('auth_token');
     const tableBody = document.querySelector('#usersTable tbody');
@@ -157,7 +157,7 @@
       });
   }
 
-  // Add user form submit
+
   document.getElementById('addUserForm').addEventListener('submit', function (e) {
     e.preventDefault();
     const message = document.getElementById('addUserMessage');
