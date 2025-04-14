@@ -63,7 +63,7 @@
 
     if (!taskTableBody) return;
 
-    fetch('http://127.0.0.1:8000/api/tasks', {
+    fetch('http://tms.bdedal.online/api/tasks', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -108,7 +108,7 @@
       due_date: document.getElementById('dueDate').value,
     };
 
-    fetch('http://127.0.0.1:8000/api/tasks', {
+    fetch('http://tms.bdedal.online/api/tasks', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
