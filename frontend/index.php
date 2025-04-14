@@ -8,7 +8,7 @@
 </head>
 <body class="bg-light d-flex align-items-center justify-content-center" style="height: 100vh;">
   <div class="text-center">
-    <h1 class="mb-4">Welcome to Task Management Systemssss</h1>
+    <h1 class="mb-4">Welcome to Task Management Systems</h1>
     <div class="d-grid gap-2 col-6 mx-auto">
       <a href="login.html" class="btn btn-primary btn-lg">Login</a>
       <a href="register.html" class="btn btn-outline-primary btn-lg">Register</a>
