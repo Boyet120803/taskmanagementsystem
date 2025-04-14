@@ -57,84 +57,79 @@
 </div>
 
 <script>
- 
-async function fetchTasks() {
-  const token = localStorage.getItem('auth_token');
-  const taskTableBody = document.getElementById('taskTableBody');
-  
-  if (!taskTableBody) return;
+  function fetchTasks() {
+    const token = localStorage.getItem('auth_token');
+    const taskTableBody = document.getElementById('taskTableBody');
 
-  try {
-    const response = await fetch('http://tms.bdedal.online/api/tasks', {
+    if (!taskTableBody) return;
+
+    fetch('http://127.0.0.1:8000/api/tasks', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json'
       }
-    });
+    })
+      .then(response => response.json().then(data => ({ ok: response.ok, data })))
+      .then(result => {
+        if (result.ok && Array.isArray(result.data)) {
+          taskTableBody.innerHTML = '';
+          result.data.forEach(task => {
+            const row = `
+              <tr>
+                <td>${task.id}</td>
+                <td>${task.title}</td>
+                <td>${task.description}</td>
+                <td><span class="badge bg-${task.status === 'completed' ? 'success' : task.status === 'in-progress' ? 'warning' : 'danger'}">${task.status}</span></td>
+                <td>${task.due_date || '—'}</td>
+              </tr>
+            `;
+            taskTableBody.innerHTML += row;
+          });
 
-    const result = await response.json();
-    
-    if (response.ok && Array.isArray(result)) {
-      taskTableBody.innerHTML = '';
-      result.forEach(task => {
-        const row = `
-          <tr>
-            <td>${task.id}</td>
-            <td>${task.title}</td>
-            <td>${task.description}</td>
-            <td><span class="badge bg-${task.status === 'completed' ? 'success' : task.status === 'in-progress' ? 'warning' : 'danger'}">${task.status}</span></td>
-            <td>${task.due_date || '—'}</td>
-          </tr>
-        `;
-        taskTableBody.innerHTML += row;
+          $('#taskTable').DataTable();
+        } else {
+          console.error('Failed to load tasks:', result.data);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching tasks:', error);
       });
-
-     
-      $('#taskTable').DataTable();  
-    } else {
-      console.error('Failed to load tasks:', result); 
-    }
-  } catch (error) {
-    console.error('Error fetching tasks:', error);
   }
-}
 
+  document.getElementById('addTaskForm').addEventListener('submit', function (event) {
+    event.preventDefault();
 
-document.getElementById('addTaskForm').addEventListener('submit', async function(event) {
-  event.preventDefault();
-  
-  const token = localStorage.getItem('auth_token'); 
-  const taskData = {
-    title: document.getElementById('taskTitle').value,
-    description: document.getElementById('taskDesc').value,
-    status: 'pending', 
-    due_date: document.getElementById('dueDate').value,
-  };
+    const token = localStorage.getItem('auth_token');
+    const taskData = {
+      title: document.getElementById('taskTitle').value,
+      description: document.getElementById('taskDesc').value,
+      status: 'pending',
+      due_date: document.getElementById('dueDate').value,
+    };
 
-  try {
-    const response = await fetch('http://tms.bdedal.online/api/tasks', {
+    fetch('http://127.0.0.1:8000/api/tasks', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,  
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
       body: JSON.stringify(taskData),
-    });
+    })
+      .then(response => response.json().then(data => ({ ok: response.ok, data })))
+      .then(result => {
+        if (result.ok) {
+          fetchTasks();
+          $('#addTaskModal').modal('hide');
+        } else {
+          console.error('Failed to add task:', result.data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error adding task:', error);
+      });
+  });
 
-    const result = await response.json();
-
-    if (response.ok) {
-      fetchTasks(); 
-      $('#addTaskModal').modal('hide'); 
-    } else {
-      console.error('Failed to add task:', result.message);
-    }
-  } catch (error) {
-    console.error('Error adding task:', error);
-  }
-});
-window.onload = fetchTasks;
-
+  window.onload = fetchTasks;
 </script>

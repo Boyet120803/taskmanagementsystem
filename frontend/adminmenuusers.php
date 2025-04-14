@@ -107,7 +107,6 @@
 </div>
 
 <script>
-
   function getRoleName(role) {
     switch (parseInt(role)) {
       case 0: return 'Admin';
@@ -118,49 +117,48 @@
   }
 
   // Load users
-  async function loadUsers() {
+  function loadUsers() {
     const token = localStorage.getItem('auth_token');
     const tableBody = document.querySelector('#usersTable tbody');
     if (!tableBody) return;
 
-    try {
-      const res = await fetch('http://tms.bdedal.online/api/users', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/json'
-        }
-      });
-      const result = await res.json();
-
-      if (res.ok && result.users) {
-        tableBody.innerHTML = '';
-        result.users.forEach(user => {
-          const row = `
-            <tr>
-              <td>${user.id}</td>
-              <td>${user.fname} ${user.mname ?? ''} ${user.lname}</td>
-              <td>${user.gender}</td>
-              <td>${user.birthdate}</td>
-              <td>${user.age}</td>
-              <td>${user.contact}</td>
-              <td>${user.address}</td>
-          
-              <td>${getRoleName(user.role)}</td>
-            </tr>
-          `;
-          tableBody.innerHTML += row;
-        });
-        new DataTable('#usersTable');
-      } else {
-        console.error('Failed to load users:', result.message);
+    fetch('http://127.0.0.1:8000/api/users', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
       }
-    } catch (err) {
-      console.error('Error loading users:', err);
-    }
+    })
+      .then(res => res.json().then(data => ({ ok: res.ok, data })))
+      .then(result => {
+        if (result.ok && result.data.users) {
+          tableBody.innerHTML = '';
+          result.data.users.forEach(user => {
+            const row = `
+              <tr>
+                <td>${user.id}</td>
+                <td>${user.fname} ${user.mname ?? ''} ${user.lname}</td>
+                <td>${user.gender}</td>
+                <td>${user.birthdate}</td>
+                <td>${user.age}</td>
+                <td>${user.contact}</td>
+                <td>${user.address}</td>
+                <td>${getRoleName(user.role)}</td>
+              </tr>
+            `;
+            tableBody.innerHTML += row;
+          });
+          new DataTable('#usersTable');
+        } else {
+          console.error('Failed to load users:', result.data.message);
+        }
+      })
+      .catch(err => {
+        console.error('Error loading users:', err);
+      });
   }
 
   // Add user form submit
-  document.getElementById('addUserForm').addEventListener('submit', async function (e) {
+  document.getElementById('addUserForm').addEventListener('submit', function (e) {
     e.preventDefault();
     const message = document.getElementById('addUserMessage');
 
@@ -179,37 +177,38 @@
       role: document.getElementById('role').value
     };
 
-    try {
-      const res = await fetch('http://tms.bdedal.online/api/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
-
-      const result = await res.json();
-      if (res.ok) {
-        message.innerHTML = `<span class="text-success">${result.message}</span>`;
-        setTimeout(() => {
-          document.getElementById('addUserForm').reset();
-          message.innerHTML = '';
-          loadUsers();
-          bootstrap.Modal.getInstance(document.getElementById('addUserModal')).hide();
-        }, 800);
-      } else {
-        let errorMessages = '';
-        for (let key in result.errors) {
-          errorMessages += result.errors[key].join('<br>') + '<br>';
+    fetch('http://127.0.0.1:8000/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => res.json().then(data => ({ ok: res.ok, data })))
+      .then(result => {
+        if (result.ok) {
+          message.innerHTML = `<span class="text-success">${result.data.message}</span>`;
+          setTimeout(() => {
+            document.getElementById('addUserForm').reset();
+            message.innerHTML = '';
+            loadUsers();
+            bootstrap.Modal.getInstance(document.getElementById('addUserModal')).hide();
+          }, 800);
+        } else {
+          let errorMessages = '';
+          for (let key in result.data.errors) {
+            errorMessages += result.data.errors[key].join('<br>') + '<br>';
+          }
+          message.innerHTML = `<span class="text-danger">${errorMessages}</span>`;
         }
-        message.innerHTML = `<span class="text-danger">${errorMessages}</span>`;
-      }
-    } catch (err) {
-      message.innerHTML = `<span class="text-danger">Error: ${err.message}</span>`;
-    }
+      })
+      .catch(err => {
+        message.innerHTML = `<span class="text-danger">Error: ${err.message}</span>`;
+      });
   });
 
   // Load on page ready
   document.addEventListener('DOMContentLoaded', loadUsers);
 </script>
+
