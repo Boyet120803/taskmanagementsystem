@@ -34,20 +34,30 @@ class AdminTaskController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id){
-
-        $task = AdminTask::find($id);
-        if(!$task) {
-            return response()->json(['message' => 'Task not found'], 404);
+    public function update(Request $request, $id)
+    {
+        try {
+            $task = AdminTask::find($id);
+            if (!$task) {
+                return response()->json(['message' => 'Task not found'], 404);
+            }
+    
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'required|string',
+                'status' => 'required|string|in:Pending,In Progress,Completed',
+                'due_date' => 'nullable|date',
+            ]);
+    
+            $task->update($validated);
+    
+            return response()->json($task);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Update failed',
+                'error' => $e->getMessage(),
+            ], 500);
         }
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'status' => 'required|string|max:50',
-            'due_date' => 'nullable|date',
-        ]);
-        $task->update($request->all());
-        return response()->json($task);
     }
 
     public function show($id){
