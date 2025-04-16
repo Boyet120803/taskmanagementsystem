@@ -151,7 +151,7 @@
     const tableBody = document.querySelector('#usersTable tbody');
     if (!tableBody) return;
 
-    fetch('https://bdedal.online/api/users', {
+    fetch('http://127.0.0.1:8000/api/users', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json'
@@ -197,7 +197,7 @@
    function showUser(id)
      {
       const token = localStorage.getItem('auth_token');
-      fetch(`https://bdedal.online/api/users/${id}`, {
+      fetch(`http://127.0.0.1:8000/api/users/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Accept': 'application/json'
@@ -232,7 +232,7 @@
           cancelButtonText: 'No, keep it'
         }).then((result) => {
           if (result.isConfirmed) {
-            fetch(`https://bdedal.online/api/users/${id}`, {
+            fetch(`http://127.0.0.1:8000/api/users/${id}`, {
               method: 'DELETE',
               headers: {
                 'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
@@ -286,7 +286,7 @@
       role: document.getElementById('role').value
     };
 
-    fetch('https://bdedal.online/api/register', {
+    fetch('http://127.0.0.1:8000/api/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
