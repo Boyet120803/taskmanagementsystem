@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 use App\Models\AdminTask;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AdminTaskController extends Controller
 {
-    public function index(){
-        return response()->json(AdminTask::all());
-    }
+    public function index()
+        {
+            $tasks = AdminTask::with('assignedUser')->get(); 
+            return response()->json($tasks); 
+        }
 
     public function store(Request $request){
         $request->validate([
@@ -16,12 +19,14 @@ class AdminTaskController extends Controller
             'description' => 'required|string',
             'status' => 'required|string|max:50',
             'due_date' => 'nullable|date',
+            'assign_to' => 'nullable|exists:users,id', 
         ]);
-        $task = Admintask::create([
+        $task = AdminTask::create([
             'title' => $request->title,
             'description' => $request->description,
             'status' => $request->status,
             'due_date' => $request->due_date,
+            'assign_to' => $request->assign_to, 
         ]);
         return response()->json([
             'message' => 'Task created successfully',
@@ -74,4 +79,15 @@ class AdminTaskController extends Controller
             'message' => 'Logout successful',
         ]);
     }
+
+
+
+
+        public function getAssignableUsers()
+        {
+            $users = User::whereIn('role', [1, 2])->get();
+            return response()->json($users);
+        }
+
+
 }

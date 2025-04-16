@@ -32,8 +32,11 @@ class User extends Authenticatable
         'role',
     ];
 
-
-  
+      public function tasks()
+      {
+          return $this->hasMany(AdminTask::class);  
+      }
+ 
     
 
     /**

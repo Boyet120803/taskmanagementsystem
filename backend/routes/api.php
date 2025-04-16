@@ -30,6 +30,8 @@ Route::middleware(['auth:sanctum', 'role:0'])->group(function() {
     Route::get('/tasks/{id}', [AdminTaskController::class, 'show']);
     Route::delete('/tasks/{id}', [AdminTaskController::class, 'destroy']);
     Route::post('/logout', [AdminTaskController::class, 'logout']);
+    Route::post('/assign-task', [AdminTaskController::class, 'assignTask']);
+    Route::get('/assignable-users', [AdminTaskController::class, 'getAssignableUsers']);
 
 });
 

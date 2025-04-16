@@ -11,8 +11,12 @@ class AdminTask extends Model
         'description',
         'status',
         'due_date',
-        'user_id',
+        'assign_to',
     ];
+ 
+     public function assignedUser()
+        {
+            return $this->belongsTo(User::class, 'assign_to');
+        }
 
-   
 }
