@@ -135,7 +135,7 @@
     const token = localStorage.getItem('auth_token');
     const taskTableBody = document.getElementById('taskTableBody');
 
-    fetch('http://bdedal.online/api/tasks', {
+    fetch('http://127.0.0.1:8000/api/tasks', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json'
@@ -180,7 +180,7 @@
     const token = localStorage.getItem('auth_token');
     const userSelect = document.getElementById('userSelect');
 
-    fetch('http://bdedal.online/api/assignable-users', {
+    fetch('http://127.0.0.1:8000/api/assignable-users', {
         headers: {
             'Authorization': `Bearer ${token}`,
             'Accept': 'application/json'
@@ -215,7 +215,7 @@
 // Show Task Details
   function showTask(id) {
     const token = localStorage.getItem('auth_token');
-    fetch(`http://bdedal.online/api/tasks/${id}`, {
+    fetch(`http://127.0.0.1:8000/api/tasks/${id}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json'
@@ -236,7 +236,7 @@
 //Edit
 function editTask(id) {
   const token = localStorage.getItem('auth_token');
-  fetch(`http://bdedal.online/api/tasks/${id}`, {
+  fetch(`http://127.0.0.1:8000/api/tasks/${id}`, {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Accept': 'application/json'
@@ -265,7 +265,7 @@ document.getElementById('editTaskForm').addEventListener('submit', function (e) 
     status: document.getElementById('editStatus').value
   };
 
-  fetch(`http://bdedal.online/api/tasks/${id}`,
+  fetch(`http://127.0.0.1:8000/api/tasks/${id}`,
    {
       method: 'PUT',
       headers: {
@@ -294,7 +294,7 @@ document.getElementById('editTaskForm').addEventListener('submit', function (e) 
         }).then((result) => {
           if (result.isConfirmed) {
             const token = localStorage.getItem('auth_token');
-            fetch(`http:http://bdedal.online/api/tasks/${id}`, {
+            fetch(`http://127.0.0.1:8000/api/tasks/${id}`, {
               method: 'DELETE',
               headers: {
                 'Authorization': `Bearer ${token}`,
@@ -335,7 +335,7 @@ document.getElementById('addTaskForm').addEventListener('submit', function (e) {
     assign_to: document.getElementById('userSelect').value // get selected user
   };
 
-  fetch('http://bdedal.online/api/tasks', {
+  fetch('http://127.0.0.1:8000/api/tasks', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`,
