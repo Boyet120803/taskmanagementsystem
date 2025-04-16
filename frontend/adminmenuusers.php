@@ -19,6 +19,7 @@
           <th>Contact</th>
           <th>Address</th>
           <th>Role</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -104,6 +105,34 @@
       </div>
     </div>
   </div>
+
+   
+  <!-- Show User Modal -->
+<div class="modal fade" id="showUserModal" tabindex="-1" aria-labelledby="showUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="showUserModalLabel">User Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Name:</strong> <span id="showUserName"></span></p>
+        <p><strong>Gender:</strong> <span id="showUserGender"></span></p>
+        <p><strong>Email:</strong> <span id="showUserEmail"></span></p>
+        <p><strong>Role:</strong> <span id="showUserRole"></span></p>
+        <p><strong>Contact:</strong> <span id="showUserContact"></span></p>
+        <p><strong>Address:</strong> <span id="showUserAddress"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 </div>
 
 <script>
@@ -122,7 +151,7 @@
     const tableBody = document.querySelector('#usersTable tbody');
     if (!tableBody) return;
 
-    fetch('http://127.0.0.1:8000/api/users', {
+    fetch('https://backend.bdedal.online/api/users', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json'
@@ -143,6 +172,14 @@
                 <td>${user.contact}</td>
                 <td>${user.address}</td>
                 <td>${getRoleName(user.role)}</td>
+                <td>
+                  <button class="btn btn-info btn-sm" onclick="showUser(${user.id})" title="Show">
+                      <i class="bi bi-eye"></i>
+                  </button>
+                  <button class="btn btn-danger btn-sm" onclick="deleteUser(${user.id})" title="Delete">
+                      <i class="bi bi-trash"></i>
+                  </button>
+              </td>
               </tr>
             `;
             tableBody.innerHTML += row;
@@ -157,6 +194,78 @@
       });
   }
 
+   function showUser(id)
+     {
+      const token = localStorage.getItem('auth_token');
+      fetch(`https://backend.bdedal.online/api/users/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json'
+        }
+      })
+      .then(res => res.json())
+      .then(user => {
+        if (user) {
+          // Populate modal with user data
+          document.getElementById('showUserName').textContent = `${user.fname} ${user.mname ?? ''} ${user.lname}`;
+          document.getElementById('showUserGender').textContent = user.gender;
+          document.getElementById('showUserEmail').textContent = user.email;
+          document.getElementById('showUserRole').textContent = getRoleName(user.role);
+          document.getElementById('showUserContact').textContent = user.contact;
+          document.getElementById('showUserAddress').textContent = user.address;
+          // Show modal
+          new bootstrap.Modal(document.getElementById('showUserModal')).show();
+        }
+      })
+      .catch(err => {
+        console.error('Error fetching user details:', err);
+      });
+     }
+
+      function deleteUser(id) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: 'You won’t be able to revert this!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, delete it!',
+          cancelButtonText: 'No, keep it'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            fetch(`https://backend.bdedal.online/api/users/${id}`, {
+              method: 'DELETE',
+              headers: {
+                'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
+                'Accept': 'application/json'
+              }
+            })
+            .then(res => res.json())
+            .then(result => {
+              if (result.deleted) {
+                Swal.fire(
+                  'Deleted!',
+                  'The user has been deleted.',
+                  'success'
+                );
+                loadUsers(); // Reload users list
+              } else {
+                Swal.fire(
+                  'Error!',
+                  'Failed to delete user.',
+                  'error'
+                );
+              }
+            })
+            .catch(err => {
+              Swal.fire(
+                'Error!',
+                'Something went wrong.',
+                'error'
+              );
+            });
+          }
+        });
+      }
 
   document.getElementById('addUserForm').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -177,7 +286,7 @@
       role: document.getElementById('role').value
     };
 
-    fetch('http://127.0.0.1:8000/api/register', {
+    fetch('https://backend.bdedal.online/api/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

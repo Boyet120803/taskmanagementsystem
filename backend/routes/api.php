@@ -45,3 +45,5 @@ Route::middleware(['auth:sanctum', 'role:2'])->group(function() {
     Route::get('/regularusers', [UserController::class, 'index']);
     Route::post('/logout', [UserController::class, 'logout']);
 });
+
+

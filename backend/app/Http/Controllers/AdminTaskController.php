@@ -47,6 +47,7 @@ class AdminTaskController extends Controller
                 'description' => 'required|string',
                 'status' => 'required|string|in:Pending,In Progress,Completed',
                 'due_date' => 'nullable|date',
+                'assign_to' => 'nullable|exists:users,id',
             ]);
     
             $task->update($validated);

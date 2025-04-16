@@ -97,6 +97,13 @@
               <option value="Completed">Completed</option>
             </select>
           </div>
+          <div class="mb-3">
+            <label for="editAssignedTo">Assign to</label>
+            <select id="editAssignedTo" class="form-select">
+              <!-- options will be loaded from JS -->
+            </select>
+          </div>
+
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-success">Update Task</button>
@@ -135,7 +142,7 @@
     const token = localStorage.getItem('auth_token');
     const taskTableBody = document.getElementById('taskTableBody');
 
-    fetch('http://127.0.0.1:8000/api/tasks', {
+    fetch('https://backend.bdedal.online/api/tasks', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json'
@@ -156,11 +163,18 @@
               <td><span class="badge bg-${task.status === 'completed' ? 'success' : task.status === 'in-progress' ? 'warning' : 'danger'}">${task.status}</span></td>
              <td>${task.assigned_user ? task.assigned_user.fname + ' ' + task.assigned_user.lname : 'Unassigned'}</td>
               <td>${task.due_date || '—'}</td>
-               <td>
-                <button class="btn btn-info btn-sm" onclick="showTask(${task.id})">Show</button>
-                <button class="btn btn-warning btn-sm" onclick="editTask(${task.id})">Edit</button>
-                <button class="btn btn-danger btn-sm" onclick="deleteTask(${task.id})">Delete</button>
-              </td>
+              <td>
+                <button class="btn btn-info btn-sm" onclick="showTask(${task.id})" title="Show">
+                    <i class="bi bi-eye"></i>
+                </button>
+                <button class="btn btn-warning btn-sm" onclick="editTask(${task.id})" title="Edit">
+                    <i class="bi bi-pencil-square"></i>
+                </button>
+                <button class="btn btn-danger btn-sm" onclick="deleteTask(${task.id})" title="Delete">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </td>
+
             </tr>
           `;
         });
@@ -180,7 +194,7 @@
     const token = localStorage.getItem('auth_token');
     const userSelect = document.getElementById('userSelect');
 
-    fetch('http://127.0.0.1:8000/api/assignable-users', {
+    fetch('https://backend.bdedal.online/api/assignable-users', {
         headers: {
             'Authorization': `Bearer ${token}`,
             'Accept': 'application/json'
@@ -215,7 +229,7 @@
 // Show Task Details
   function showTask(id) {
     const token = localStorage.getItem('auth_token');
-    fetch(`http://127.0.0.1:8000/api/tasks/${id}`, {
+    fetch(`https://backend.bdedal.online/api/tasks/${id}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json'
@@ -236,7 +250,9 @@
 //Edit
 function editTask(id) {
   const token = localStorage.getItem('auth_token');
-  fetch(`http://127.0.0.1:8000/api/tasks/${id}`, {
+
+  // Fetch task
+  fetch(`https://backend.bdedal.online/api/tasks/${id}`, {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Accept': 'application/json'
@@ -244,14 +260,41 @@ function editTask(id) {
   })
   .then(res => res.json())
   .then(task => {
+    // Populate fields
     document.getElementById('editTaskId').value = task.id;
     document.getElementById('editTaskTitle').value = task.title;
     document.getElementById('editTaskDesc').value = task.description;
     document.getElementById('editDueDate').value = task.due_date || '';
     document.getElementById('editStatus').value = task.status;
+
+   // Fetch users for dropdown
+    fetch('https://backend.bdedal.online/assignable-users', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      }
+    })
+    .then(res => res.json())
+    .then(users => {
+      const assignSelect = document.getElementById('editAssignedTo');
+      assignSelect.innerHTML = '';
+      users.forEach(user => {
+        if (user.role === 1 || user.role === 2) {
+          const option = document.createElement('option');
+          option.value = user.id;
+          option.textContent = `${user.fname} ${user.lname} (${user.role === 1 ? 'Manager' : 'User'})`;
+          if (user.id === task.assigned_to) {
+            option.selected = true;
+          }
+          assignSelect.appendChild(option);
+        }
+      });
+    });
+
     $('#editTaskModal').modal('show');
   });
 }
+
 // Edit Task Form
 document.getElementById('editTaskForm').addEventListener('submit', function (e) {
   e.preventDefault();
@@ -262,10 +305,11 @@ document.getElementById('editTaskForm').addEventListener('submit', function (e) 
     title: document.getElementById('editTaskTitle').value,
     description: document.getElementById('editTaskDesc').value,
     due_date: document.getElementById('editDueDate').value,
-    status: document.getElementById('editStatus').value
+    status: document.getElementById('editStatus').value,
+    assign_to: document.getElementById('editAssignedTo').value
   };
 
-  fetch(`http://127.0.0.1:8000/api/tasks/${id}`,
+  fetch(`https://backend.bdedal.online/api/tasks/${id}`,
    {
       method: 'PUT',
       headers: {
@@ -274,14 +318,13 @@ document.getElementById('editTaskForm').addEventListener('submit', function (e) 
         'Accept': 'application/json'
       },
       body: JSON.stringify(updatedTask)
-        })
-        .then(res => res.json())
-        .then(result => {
-          $('#editTaskModal').modal('hide');
-          fetchTasks();
-        });
-      });
-
+  })
+  .then(res => res.json())
+  .then(result => {
+    $('#editTaskModal').modal('hide');
+    fetchTasks();
+  });
+});
       function deleteTask(id) {
         Swal.fire({
           title: 'Are you sure?',
@@ -294,7 +337,7 @@ document.getElementById('editTaskForm').addEventListener('submit', function (e) 
         }).then((result) => {
           if (result.isConfirmed) {
             const token = localStorage.getItem('auth_token');
-            fetch(`http://127.0.0.1:8000/api/tasks/${id}`, {
+            fetch(`https://backend.bdedal.online/api/tasks/${id}`, {
               method: 'DELETE',
               headers: {
                 'Authorization': `Bearer ${token}`,
@@ -332,10 +375,10 @@ document.getElementById('addTaskForm').addEventListener('submit', function (e) {
     description: document.getElementById('taskDesc').value,
     status: 'pending',
     due_date: document.getElementById('dueDate').value,
-    assign_to: document.getElementById('userSelect').value // get selected user
+    assign_to: document.getElementById('editAssignedTo').value
   };
 
-  fetch('http://127.0.0.1:8000/api/tasks', {
+  fetch('https://backend.bdedal.online/api/tasks', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -356,6 +399,10 @@ document.getElementById('addTaskForm').addEventListener('submit', function (e) {
   .catch(error => {
     console.error('Error adding task:', error);
   });
+});
+document.addEventListener('DOMContentLoaded', function () {
+  fetchTasks();
+  fetchUsers(); // ✅ fetch assignable users when the page loads
 });
 window.onload = function() {
   fetchUsers();
