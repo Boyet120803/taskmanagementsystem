@@ -51,7 +51,7 @@
           </div>
           <div class="mb-3">
             <label for="userSelect" class="form-label">Assign To</label>
-            <select class="form-select" id="userSelect" name="assign_to" required>
+            <select class="form-select" id="addAssignedTo" name="assign_to" required>
               <option value="" disabled selected>Select User</option>
               <!-- Options will be populated by fetchUsers() -->
             </select>
@@ -142,7 +142,7 @@
     const token = localStorage.getItem('auth_token');
     const taskTableBody = document.getElementById('taskTableBody');
 
-    fetch('https://backend.bdedal.online/api/tasks', {
+    fetch('https://bdedal.online/api/tasks', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json'
@@ -192,9 +192,9 @@
   // Fetch Users for Assigning Tasks
   function fetchUsers() {
     const token = localStorage.getItem('auth_token');
-    const userSelect = document.getElementById('userSelect');
+    const userSelect = document.getElementById('addAssignedTo');
 
-    fetch('https://backend.bdedal.online/api/assignable-users', {
+    fetch('https://bdedal.online/api/assignable-users', {
         headers: {
             'Authorization': `Bearer ${token}`,
             'Accept': 'application/json'
@@ -229,7 +229,7 @@
 // Show Task Details
   function showTask(id) {
     const token = localStorage.getItem('auth_token');
-    fetch(`https://backend.bdedal.online/api/tasks/${id}`, {
+    fetch(`https://bdedal.online/api/tasks/${id}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json'
@@ -252,7 +252,7 @@ function editTask(id) {
   const token = localStorage.getItem('auth_token');
 
   // Fetch task
-  fetch(`https://backend.bdedal.online/api/tasks/${id}`, {
+  fetch(`https://bdedal.online/api/tasks/${id}`, {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Accept': 'application/json'
@@ -268,7 +268,7 @@ function editTask(id) {
     document.getElementById('editStatus').value = task.status;
 
    // Fetch users for dropdown
-    fetch('https://backend.bdedal.online/assignable-users', {
+    fetch('https://bdedal.online/api/assignable-users', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json'
@@ -309,7 +309,7 @@ document.getElementById('editTaskForm').addEventListener('submit', function (e) 
     assign_to: document.getElementById('editAssignedTo').value
   };
 
-  fetch(`https://backend.bdedal.online/api/tasks/${id}`,
+  fetch(`https://bdedal.online/api/tasks/${id}`,
    {
       method: 'PUT',
       headers: {
@@ -337,7 +337,7 @@ document.getElementById('editTaskForm').addEventListener('submit', function (e) 
         }).then((result) => {
           if (result.isConfirmed) {
             const token = localStorage.getItem('auth_token');
-            fetch(`https://backend.bdedal.online/api/tasks/${id}`, {
+            fetch(`https://bdedal.online/api/tasks/${id}`, {
               method: 'DELETE',
               headers: {
                 'Authorization': `Bearer ${token}`,
@@ -375,10 +375,10 @@ document.getElementById('addTaskForm').addEventListener('submit', function (e) {
     description: document.getElementById('taskDesc').value,
     status: 'pending',
     due_date: document.getElementById('dueDate').value,
-    assign_to: document.getElementById('editAssignedTo').value
+    assign_to: document.getElementById('addAssignedTo').value
   };
 
-  fetch('https://backend.bdedal.online/api/tasks', {
+  fetch('https://bdedal.online/api/tasks', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`,

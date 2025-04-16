@@ -26,7 +26,7 @@
           return;
         }
 
-        fetch('https://backend.bdedal.online/api/logout', {
+        fetch('https://bdedal.online/api/logout', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
