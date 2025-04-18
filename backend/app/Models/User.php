@@ -37,6 +37,19 @@ class User extends Authenticatable
           return $this->hasMany(AdminTask::class);  
       }
  
+      public function teamMembers() {
+        return $this->hasMany(TeamMember::class, 'manager_id');
+    }
+    
+        public function assignedTeam() {
+            return $this->hasOne(TeamMember::class, 'user_id');
+        }
+
+        public function teamMembership()
+        {
+            return $this->hasOne(TeamMember::class, 'user_id');
+        }
+
     
 
     /**

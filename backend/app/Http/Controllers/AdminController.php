@@ -125,7 +125,17 @@ class AdminController extends Controller
             ]);
         }
     
-
+        public function profile(){
+          
+            $user = auth()->user();
+            $fullName = $user->fname . ' ' . $user->mname . ' ' . $user->lname;
+            return response()->json([
+                'full_name' => $fullName,
+                'email' => $user->email, 
+                'role' => $user->role,
+            ]);
+        }
+        
        
         
 

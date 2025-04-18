@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\AdminTask;
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -9,7 +9,7 @@ class AdminTaskController extends Controller
 {
     public function index()
         {
-            $tasks = AdminTask::with('assignedUser')->get(); 
+            $tasks = Task::with('assignedUser')->get(); 
             return response()->json($tasks); 
         }
 
@@ -21,7 +21,7 @@ class AdminTaskController extends Controller
             'due_date' => 'nullable|date',
             'assign_to' => 'nullable|exists:users,id', 
         ]);
-        $task = AdminTask::create([
+        $task = Task::create([
             'title' => $request->title,
             'description' => $request->description,
             'status' => $request->status,
@@ -37,7 +37,7 @@ class AdminTaskController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $task = AdminTask::find($id);
+            $task = Task::find($id);
             if (!$task) {
                 return response()->json(['message' => 'Task not found'], 404);
             }
@@ -62,7 +62,7 @@ class AdminTaskController extends Controller
     }
 
     public function show($id){
-        $task = AdminTask::find($id);
+        $task = Task::find($id);
 
         if(!$task) {
             return response()->json(['message' => 'Task not found'], 404);
@@ -71,7 +71,7 @@ class AdminTaskController extends Controller
     }
 
     public function destroy($id){
-        $task = AdminTask::find($id);
+        $task = Task::find($id);
         if(!$task) {
             return response()->json(['message' => 'Task not found'], 404);
         }

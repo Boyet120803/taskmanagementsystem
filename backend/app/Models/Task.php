@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AdminTask extends Model
+class Task extends Model
 {
     protected $fillable = [
         'title',
@@ -19,4 +19,8 @@ class AdminTask extends Model
             return $this->belongsTo(User::class, 'assign_to');
         }
 
+        public function manager()
+        {
+            return $this->belongsTo(User::class, 'assign_to');
+        }
 }

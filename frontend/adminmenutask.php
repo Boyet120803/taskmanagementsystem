@@ -5,7 +5,7 @@
 <?php require_once('admin/footer.php') ?>
 
 <div class="main-content">
-  <div class="container mt-4">
+  <div class="container mt-1">
     <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addTaskModal">
       ➕ Add New Task
     </button>
@@ -400,10 +400,10 @@ document.getElementById('addTaskForm').addEventListener('submit', function (e) {
     console.error('Error adding task:', error);
   });
 });
-document.addEventListener('DOMContentLoaded', function () {
-  fetchTasks();
-  fetchUsers(); // ✅ fetch assignable users when the page loads
-});
+// document.addEventListener('DOMContentLoaded', function () {
+//   fetchTasks();
+//   fetchUsers(); 
+// });
 window.onload = function() {
   fetchUsers();
   fetchTasks();

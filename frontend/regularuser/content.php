@@ -2,7 +2,6 @@
 <div class="main-content">
     <div class="container mt-4">
       <h1>Welcome to the Dashboard</h1>
-      <p>You are now logged in.</p>
       <div class="row mt-4">
         <div class="col-md-4">
           <div class="card text-white bg-primary mb-3">

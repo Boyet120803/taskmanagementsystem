@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -26,7 +25,14 @@ class UserController extends Controller
         ]);
     }
 
-   
-    
-
+    public function profile(){
+          
+        $user = auth()->user();
+        $fullName = $user->fname . ' ' . $user->mname . ' ' . $user->lname;
+        return response()->json([
+            'full_name' => $fullName,
+            'email' => $user->email, 
+            'role' => $user->role,
+        ]);
+    }
 }

@@ -5,9 +5,8 @@
 <?php require_once ('admin/footer.php') ?>
 
 <div class="main-content">
-  <div class="container mt-4">
+  <div class="container mt-1">
     <button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#addUserModal">Add User</button>
-
     <table id="usersTable" class="table table-striped table-bordered">
       <thead>
         <tr>
@@ -206,7 +205,6 @@
       .then(res => res.json())
       .then(user => {
         if (user) {
-          // Populate modal with user data
           document.getElementById('showUserName').textContent = `${user.fname} ${user.mname ?? ''} ${user.lname}`;
           document.getElementById('showUserGender').textContent = user.gender;
           document.getElementById('showUserEmail').textContent = user.email;
@@ -228,8 +226,8 @@
           text: 'You won’t be able to revert this!',
           icon: 'warning',
           showCancelButton: true,
-          confirmButtonText: 'Yes, delete it!',
-          cancelButtonText: 'No, keep it'
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'No'
         }).then((result) => {
           if (result.isConfirmed) {
             fetch(`https://backend.bdedal.online/api/users/${id}`, {

@@ -6,6 +6,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminTaskController;
+use App\Http\Controllers\TeamController;
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -32,18 +34,31 @@ Route::middleware(['auth:sanctum', 'role:0'])->group(function() {
     Route::post('/logout', [AdminTaskController::class, 'logout']);
     Route::post('/assign-task', [AdminTaskController::class, 'assignTask']);
     Route::get('/assignable-users', [AdminTaskController::class, 'getAssignableUsers']);
-
+    Route::get('/profile', [AdminController::class, 'profile']);
 });
 
 
 Route::middleware(['auth:sanctum', 'role:1'])->group(function() {
     Route::get('/managers', [ManagerController::class, 'index']);
     Route::post('/logout', [ManagerController::class, 'logout']);
+    Route::get('/profile', [ManagerController::class, 'profile']);
+
+    Route::get('/team-available-users', [TeamController::class, 'getAvailableUsers']);
+    Route::get('/team-members', [TeamController::class, 'getTeamMembers']);
+    Route::post('/team-assign', [TeamController::class, 'assignToTeam']);
+    Route::delete('/team-remove/{user_id}', [TeamController::class, 'removeFromTeam']);
+    Route::get('/managertasks', [ManagerController::class, 'getMyAssignedTasks']);
+  
+    Route::get('/manager-team-members', [ManagerController::class, 'getTeamMembers']);
+
 });
+
+Route::post('/assign-task', [ManagerController::class, 'assignTaskToTeam']);
+
 
 Route::middleware(['auth:sanctum', 'role:2'])->group(function() {
     Route::get('/regularusers', [UserController::class, 'index']);
     Route::post('/logout', [UserController::class, 'logout']);
+    Route::get('/profile', [UserController::class, 'profile']);
 });
-
 
