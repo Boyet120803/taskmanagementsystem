@@ -14,7 +14,7 @@ class Task extends Model
         'assign_to',
     ];
  
-     public function assignedUser()
+       public function assignedUser()
         {
             return $this->belongsTo(User::class, 'assign_to');
         }
@@ -23,4 +23,6 @@ class Task extends Model
         {
             return $this->belongsTo(User::class, 'assign_to');
         }
+    
+
 }

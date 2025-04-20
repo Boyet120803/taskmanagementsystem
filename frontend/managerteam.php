@@ -3,17 +3,30 @@
 <?php require_once ('manager/navbar.php') ?>
 <?php require_once ('manager/js.php') ?>
 <?php require_once ('manager/footer.php') ?>
+<style>
+    #teamTable,
+    #teamTable thead,
+    #teamTable tbody,
+    #teamTable th,
+    #teamTable td {
+        background-color: #1c1c27 !important;
+        color: #808080 !important;
+        border-color: #808080 !important;
+    }
+
+    #teamTable tbody tr:hover {
+        background-color: #2a2a3b !important;
+    }
+</style>
 
 <div class="main-content">
     <div class="container mt-1">
-        <h3 class="mb-4">Team</h3>
-
-        <!-- Select User -->
-        <div class="card mb-4">
+        <h3 class="mb-4" style="color: #808080;">Team</h3>
+        <div class="card mb-4" style="background-color: #1c1c27; color: #808080">
             <div class="card-body">
                 <label for="userSelect" class="form-label">Select User to Add to Team</label>
-                <select class="form-select" id="userSelect">
-                    <option value="" disabled selected>Select a User</option>
+                <select class="form-select" style="background-color: #1c1c27; color: #808080" id="userSelect">
+                    <option value="" disabled selected> Select a User</option>
                     <!-- Options will be filled by JS -->
                 </select>
                 <button id="assignToTeamBtn" class="btn btn-primary mt-3">Assign to Team</button>
@@ -21,7 +34,7 @@
         </div>
 
         <!-- Team Members Table -->
-        <div class="card">
+        <div class="card" style="background-color: #1c1c27; color: #808080">
             <div class="card-body">
                 <h5>Your Team Members</h5>
                 <table class="table mt-3" id="teamTable">
@@ -119,8 +132,8 @@ document.getElementById('assignToTeamBtn').addEventListener('click', function ()
                     title: 'Success!',
                     text: 'User assigned successfully!'
                 });
-                fetchAvailableUsers(); // Update select list
-                fetchTeamMembers();    // Update team table
+                fetchAvailableUsers(); 
+                fetchTeamMembers();   
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -164,7 +177,7 @@ document.getElementById('assignToTeamBtn').addEventListener('click', function ()
                     title: 'Removed!',
                     text: data.message
                 });
-                fetchTeamMembers(); // Reload updated team
+                fetchTeamMembers(); 
             })
             .catch(error => {
                 console.error('Error removing user:', error);

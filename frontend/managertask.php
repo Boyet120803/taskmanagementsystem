@@ -3,10 +3,24 @@
 <?php require_once ('manager/navbar.php') ?>
 <?php require_once ('manager/js.php') ?>
 <?php require_once ('manager/footer.php') ?>
+<style>
+    #taskTable,
+    #taskTable thead,
+    #taskTable tbody,
+    #taskTable th,
+    #taskTable td {
+        background-color: #1c1c27 !important;
+        color: #808080 !important;
+        border-color: #808080 !important;
+    }
 
+    #taskTable tbody tr:hover {
+        background-color: #2a2a3b !important;
+    }
+</style>
 <div class="main-content">
     <div class="container mt-1">
-        <h3 class="mb-2">Task</h3>
+        <h3 class="mb-2" style="color: #808080;">Task</h3>
         <table class="table mt-4" id="taskTable">
             <thead>
                 <tr>
@@ -74,7 +88,7 @@ function fetchManagerTasks() {
                 <td>${task.title}</td>
                 <td>${task.description}</td>
                 <td>
-                    <select class="form-select" id="assign-${task.id}">
+                    <select class="form-select" style="background-color:  #1c1c27; color: #808080;"id="assign-${task.id}">
                         <option value="">-- Select Member --</option>
                         ${teamOptions}
                     </select>
@@ -114,7 +128,7 @@ function assignTask(taskId) {
         },
         body: JSON.stringify({
             task_id: taskId,
-            user_id: userId
+            user_id: userId,
         })
     })
     .then(response => response.json())

@@ -7,7 +7,7 @@
 <div class="main-content">
   <div class="container mt-1">
     <button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#addUserModal">Add User</button>
-    <table id="usersTable" class="table table-striped table-bordered">
+    <table id="usersTable" class="table table-striped table-bordered text-white">
       <thead>
         <tr>
           <th>ID</th>
@@ -21,7 +21,7 @@
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody></tbody>
+     <tbody></tbody>
     </table>
   </div>
 

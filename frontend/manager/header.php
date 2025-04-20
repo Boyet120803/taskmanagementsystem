@@ -8,15 +8,17 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
- <!-- Add DataTables CSS and JS -->
-<!-- DataTables CSS -->
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-<!-- jQuery (necessary for DataTables) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- DataTables JS -->
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
 
   <style>
+
+     @font-face {
+        font-family: 'BodoniFLF';
+        src: url('fonts/BodoniFLF-Roman.ttf') format('truetype');
+      }
 
     body{
       background-color: #1c1c27;
@@ -69,6 +71,44 @@
     .container {
       max-width: 1200px;
     }
+
+
+    .logo-container img{
+      width: 70%;
+      height: auto;
+    }
+
+    .logo-container{
+      height: 170px;
+      width: 200px;
+      margin-top:-20px;
+    }
+    .logo-container p {
+      font-size: 20px;
+      color: gray;
+      margin-top: -40px;
+      margin-left: 20px;
+      letter-spacing: 15px;
+      font-family: 'BodoniFLF', serif;
+      font-weight: bold;
+      position: relative;
+    }
+
+
+    .logo-container p::before {
+      content: 'MANAGER'; 
+      position: absolute;
+      top: 3px;  
+      left: -2px;
+      color: black; 
+      z-index: -1;
+    }
+    .logo-container hr{
+      margin-top: -10px;
+      margin-left:15px;
+      width:100%;
+    }
+
   </style>
 </head>
 <body>

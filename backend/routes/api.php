@@ -50,15 +50,18 @@ Route::middleware(['auth:sanctum', 'role:1'])->group(function() {
     Route::get('/managertasks', [ManagerController::class, 'getMyAssignedTasks']);
   
     Route::get('/manager-team-members', [ManagerController::class, 'getTeamMembers']);
-
+    Route::post('/assign-task', [ManagerController::class, 'assignTaskToTeam']);
 });
 
-Route::post('/assign-task', [ManagerController::class, 'assignTaskToTeam']);
+
 
 
 Route::middleware(['auth:sanctum', 'role:2'])->group(function() {
     Route::get('/regularusers', [UserController::class, 'index']);
     Route::post('/logout', [UserController::class, 'logout']);
     Route::get('/profile', [UserController::class, 'profile']);
+    Route::get('/user-tasks', [UserController::class, 'userTasks']);
+    Route::get('/userprofile', [UserController::class, 'userprofile']);
+    Route::put('/updateprofile', [UserController::class, 'update']);
 });
 

@@ -8,6 +8,9 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
   <style>
     body{
       background-color: #1c1c27;
@@ -59,6 +62,43 @@
     .container {
       max-width: 1200px;
     }
+
+    .logo-container img{
+      width: 70%;
+      height: auto;
+    }
+
+    .logo-container{
+      height: 170px;
+      width: 200px;
+      margin-top:-20px;
+    }
+    .logo-container p {
+      font-size: 20px;
+      color: gray;
+      margin-top: -40px;
+      margin-left: 30px;
+      letter-spacing: 15px;
+      font-family: 'BodoniFLF', serif;
+      font-weight: bold;
+      position: relative;
+    }
+
+
+    .logo-container p::before {
+      content: 'USER'; 
+      position: absolute;
+      top: 3px;  
+      left: 29px;
+      color: black; 
+      z-index: -1;
+    }
+    .logo-container hr{
+      margin-top: -10px;
+      margin-left:15px;
+      width:100%;
+    }
+  
   </style>
 </head>
 <body>

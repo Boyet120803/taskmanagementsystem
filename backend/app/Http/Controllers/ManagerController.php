@@ -51,34 +51,40 @@ class ManagerController extends Controller
 
 
         public function assignTaskToTeam(Request $request)
-{
+        {
+            $manager = Auth::user(); 
+        
+            if (!$manager || $manager->role != 1) { 
+                return response()->json(['message' => 'Unauthorized'], 403);
+            }
+        
             $validated = $request->validate([
                 'task_id' => 'required|exists:tasks,id',
                 'user_id' => 'required|exists:users,id',
             ]);
-
-            // I-check if na-assign na ba daan ang task sa user (optional)
+        
             $existing = TaskAssignment::where('task_id', $validated['task_id'])
-                                    ->where('user_id', $validated['user_id'])
-                                    ->first();
-
+                ->where('user_id', $validated['user_id'])
+                ->first();
+        
             if ($existing) {
                 return response()->json(['message' => 'This user is already assigned to the task.'], 409);
             }
-
-            // I-save ang assignment
+        
+          
             TaskAssignment::create([
                 'task_id' => $validated['task_id'],
                 'user_id' => $validated['user_id'],
+                'manager_id' => $manager->id, 
             ]);
-
+        
             return response()->json(['message' => 'Task assigned successfully.']);
         }
-
+        
 
                 public function getTeamMembers()
                 {
-                    $managerId = auth()->id(); // get currently authenticated manager
+                    $managerId = auth()->id(); 
                     $members = TeamMember::with('user')
                         ->where('manager_id', $managerId)
                         ->get();

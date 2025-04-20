@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 class TeamController extends Controller
 {
-    // Kunin ang lahat ng pwedeng i-assign na users (role = 2 for regular user)
     public function getAvailableUsers()
     {
         $users = User::where('role', 2)->get();
@@ -21,10 +20,8 @@ class TeamController extends Controller
             'user_id' => 'required|exists:users,id',
         ]);
     
-        $manager_id = Auth::id(); // current manager
+        $manager_id = Auth::id(); 
         $user_id = $request->user_id;
-    
-        // Check kung existing na ang assignment
         $exists = TeamMember::where('manager_id', $manager_id)
                             ->where('user_id', $user_id)
                             ->first();
@@ -33,7 +30,6 @@ class TeamController extends Controller
                 return response()->json(['message' => 'User already assigned.'], 409);
             }
         
-            // Create the team member assignment
             $teamMember = TeamMember::create([
                 'manager_id' => $manager_id,
                 'user_id' => $user_id
