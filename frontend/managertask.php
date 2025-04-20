@@ -88,7 +88,7 @@ function fetchManagerTasks() {
                 <td>${task.title}</td>
                 <td>${task.description}</td>
                 <td>
-                    <select class="form-select" style="background-color:  #1c1c27; color: #808080;"id="assign-${task.id}">
+                    <select class="form-select" style="background-color:  #1c1c27; color: #808080; "id="assign-${task.id}">
                         <option value="">-- Select Member --</option>
                         ${teamOptions}
                     </select>
