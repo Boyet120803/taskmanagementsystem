@@ -23,6 +23,14 @@ class Task extends Model
         {
             return $this->belongsTo(User::class, 'assign_to');
         }
-    
+        
+        public function taskAssignments()
+        {
+            return $this->hasMany(TaskAssignment::class, 'task_id');
+        }        
 
+        public function submissions()
+        {
+            return $this->hasMany(TaskSubmission::class, 'task_id');
+        }
 }

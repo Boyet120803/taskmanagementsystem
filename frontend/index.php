@@ -24,7 +24,7 @@
 </style>
 <body class="bg-light d-flex align-items-center justify-content-center" style="height: 100vh;">
   <div class="text-center">
-    <h2 class="mb-4">Welcome to Task Management Systems</h2>
+    <h2 class="mb-4">Task Management System</h2>
     <div class="menu d-grid gap-2 col-6 mx-auto">
       <a href="login.html" class="btn btn-primary btn-lg">Login</a>
       <a href="register.html" class="btn btn-outline-primary btn-lg">Register</a>

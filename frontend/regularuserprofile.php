@@ -21,10 +21,10 @@
         <hr class="border-light">
 
         <div id="profileInfo" class="row">
-          <!-- Profile data will be injected here -->
+         
         </div>
 
-        <!-- Edit Button -->
+  
         <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#editProfileModal">Edit Profile</button>
 
       </div>
@@ -32,7 +32,7 @@
   </div>
 </div>
 
-<!-- Edit Profile Modal -->
+
 <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content border-0 rounded-3">
@@ -97,7 +97,7 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("https://backend.bdedal.online/api/userprofile", {
+  fetch("http://127.0.0.1:8000/api/userprofile", {
     method: "GET",
     headers: {
       "Authorization": `Bearer ${localStorage.getItem("auth_token")}`,
@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     container.innerHTML = profileHTML;
 
-    // Populate the edit form with current data
+
     document.getElementById("editFname").value = data.fname;
     document.getElementById("editMname").value = data.mname;
     document.getElementById("editLname").value = data.lname;
@@ -170,7 +170,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("profileInfo").innerHTML = "<p class='text-danger'>Failed to load profile information.</p>";
   });
 
-  // Handle form submission for editing profile
+ 
 document.getElementById("editProfileForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
@@ -186,7 +186,7 @@ document.getElementById("editProfileForm").addEventListener("submit", function (
     email: document.getElementById("editEmail").value,
   };
 
-  fetch("https://backend.bdedal.online/api/updateprofile", {
+  fetch("http://127.0.0.1:8000/api/updateprofile", {
     method: "PUT",
     headers: {
       "Authorization": `Bearer ${localStorage.getItem("auth_token")}`,
@@ -196,7 +196,6 @@ document.getElementById("editProfileForm").addEventListener("submit", function (
   })
   .then(response => response.json())
   .then(data => {
-    // Show SweetAlert success message
     Swal.fire({
       icon: 'success',
       title: 'Profile Updated',
@@ -204,13 +203,13 @@ document.getElementById("editProfileForm").addEventListener("submit", function (
       confirmButtonColor: '#3085d6',
       confirmButtonText: 'OK'
     }).then(() => {
-      // Close modal manually
+  
       const modalEl = document.getElementById('editProfileModal');
       const modalInstance = bootstrap.Modal.getInstance(modalEl);
       modalInstance.hide();
 
-      // Optionally reload the page or update the DOM
-      location.reload(); // Or fetch updated profile data only
+    
+      location.reload(); 
     });
   })
   .catch(error => {

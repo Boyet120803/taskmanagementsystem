@@ -90,14 +90,6 @@
             <input type="date" class="form-control" id="editDueDate">
           </div>
           <div class="mb-3">
-            <label for="editStatus">Status</label>
-            <select id="editStatus" class="form-select">
-              <option value="Pending">Pending</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Completed">Completed</option>
-            </select>
-          </div>
-          <div class="mb-3">
             <label for="editAssignedTo">Assign to</label>
             <select id="editAssignedTo" class="form-select">
               <!-- options will be loaded from JS -->
@@ -126,6 +118,7 @@
         <p><strong>Description:</strong> <span id="showTaskDesc"></span></p>
         <p><strong>Status:</strong> <span id="showTaskStatus"></span></p>
         <p><strong>Due Date:</strong> <span id="showTaskDue"></span></p>
+        <p><strong>Assigned To:</strong> <span id="showTaskAssignedTo"></span></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -142,7 +135,7 @@
     const token = localStorage.getItem('auth_token');
     const taskTableBody = document.getElementById('taskTableBody');
 
-    fetch('https://backend.bdedal.online/api/tasks', {
+    fetch('http://127.0.0.1:8000/api/tasks', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json'
@@ -160,8 +153,19 @@
               <td>${task.id}</td>
               <td>${task.title}</td>
               <td>${task.description}</td>
-              <td><span class="badge bg-${task.status === 'completed' ? 'success' : task.status === 'in-progress' ? 'warning' : 'danger'}">${task.status}</span></td>
-             <td>${task.assigned_user ? task.assigned_user.fname + ' ' + task.assigned_user.lname : 'Unassigned'}</td>
+             <td>
+                <span class="badge 
+                  ${task.status === 'Completed' ? 'bg-success' : 
+                    task.status === 'In Progress' ? 'bg-warning text-dark' : 
+                    task.status === 'Rejected' ? 'bg-danger' : 
+                    task.status === 'Pending' ? 'bg-secondary' : 
+                    task.status === 'No Submission' ? 'bg-dark text-white' : 
+                    'bg-light text-dark'}">
+                  ${task.status || 'No Status'}
+                </span>
+              </td>
+
+              <td>${task.assigned_user}</td>
               <td>${task.due_date || '—'}</td>
               <td>
                 <button class="btn btn-info btn-sm" onclick="showTask(${task.id})" title="Show">
@@ -194,7 +198,7 @@
     const token = localStorage.getItem('auth_token');
     const userSelect = document.getElementById('addAssignedTo');
 
-    fetch('https://backend.bdedal.online/api/assignable-users', {
+    fetch('http://127.0.0.1:8000/api/assignable-users', {
         headers: {
             'Authorization': `Bearer ${token}`,
             'Accept': 'application/json'
@@ -229,7 +233,7 @@
 // Show Task Details
   function showTask(id) {
     const token = localStorage.getItem('auth_token');
-    fetch(`https://backend.bdedal.online/api/tasks/${id}`, {
+    fetch(`http://127.0.0.1:8000/api/tasks/${id}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json'
@@ -241,7 +245,7 @@
       document.getElementById('showTaskDesc').textContent = task.description;
       document.getElementById('showTaskStatus').textContent = task.status;
       document.getElementById('showTaskDue').textContent = task.due_date || 'N/A';
-      
+      document.getElementById('showTaskAssignedTo').textContent = task.assigned_user || 'Unassigned';
       // Show modal
       $('#showTaskModal').modal('show');
     });
@@ -252,7 +256,7 @@ function editTask(id) {
   const token = localStorage.getItem('auth_token');
 
   // Fetch task
-  fetch(`https://backend.bdedal.online/api/tasks/${id}`, {
+  fetch(`http://127.0.0.1:8000/api/tasks/${id}`, {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Accept': 'application/json'
@@ -265,10 +269,9 @@ function editTask(id) {
     document.getElementById('editTaskTitle').value = task.title;
     document.getElementById('editTaskDesc').value = task.description;
     document.getElementById('editDueDate').value = task.due_date || '';
-    document.getElementById('editStatus').value = task.status;
 
    // Fetch users for dropdown
-    fetch('https://backend.bdedal.online/api/assignable-users', {
+    fetch('http://127.0.0.1:8000/api/assignable-users', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json'
@@ -305,11 +308,10 @@ document.getElementById('editTaskForm').addEventListener('submit', function (e) 
     title: document.getElementById('editTaskTitle').value,
     description: document.getElementById('editTaskDesc').value,
     due_date: document.getElementById('editDueDate').value,
-    status: document.getElementById('editStatus').value,
     assign_to: document.getElementById('editAssignedTo').value
   };
 
-  fetch(`https://backend.bdedal.online/api/tasks/${id}`,
+  fetch(`http://127.0.0.1:8000/api/tasks/${id}`,
    {
       method: 'PUT',
       headers: {
@@ -337,7 +339,7 @@ document.getElementById('editTaskForm').addEventListener('submit', function (e) 
         }).then((result) => {
           if (result.isConfirmed) {
             const token = localStorage.getItem('auth_token');
-            fetch(`https://backend.bdedal.online/api/tasks/${id}`, {
+            fetch(`http://127.0.0.1:8000/api/tasks/${id}`, {
               method: 'DELETE',
               headers: {
                 'Authorization': `Bearer ${token}`,
@@ -378,7 +380,7 @@ document.getElementById('addTaskForm').addEventListener('submit', function (e) {
     assign_to: document.getElementById('addAssignedTo').value
   };
 
-  fetch('https://backend.bdedal.online/api/tasks', {
+  fetch('http://127.0.0.1:8000/api/tasks', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`,

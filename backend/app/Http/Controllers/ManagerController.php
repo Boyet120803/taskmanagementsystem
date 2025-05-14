@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Task;
 use App\Models\TeamMember;
 use App\Models\TaskAssignment;
+use App\Models\TaskSubmission;
 
 class ManagerController extends Controller
 {
@@ -41,11 +42,12 @@ class ManagerController extends Controller
 
         public function getMyAssignedTasks()
         {
-             $manager_id = Auth::id();
-
-             $tasks = Task::where('assign_to', $manager_id)->get();
-
-             return response()->json($tasks);
+            $manager_id = Auth::id();
+        
+            $tasks = Task::where('assign_to', $manager_id)
+                ->with(['taskAssignments.user']) // isama ang assigned users
+                ->get();
+            return response()->json($tasks);
         }
 
 
@@ -91,6 +93,47 @@ class ManagerController extends Controller
                 
                     return response()->json($members);
                 }
+
                 
-            
+                public function showUserSubmission($task_id, $user_id)
+                {
+                    $submission = TaskSubmission::where('task_id', $task_id)
+                        ->where('user_id', $user_id)
+                        ->first(); // ✅ single record
+                
+                    if (!$submission) {
+                        return response()->json(['message' => 'No submission found.'], 404);
+                    }
+                
+                    return response()->json([
+                        'id' => $submission->id,
+                        'notes' => $submission->notes,
+                        'status' => $submission->status,
+                        'file_path' => $submission->file_path,
+                    ], 200);
+                }
+
+
+                public function updateStatus(Request $request, $id)
+                {
+                    $submission = TaskSubmission::find($id);
+                
+                    if (!$submission) {
+                        return response()->json(['message' => 'Submission not found'], 404);
+                    }
+                
+                    $submission->status = $request->status;
+                
+                    if ($request->status === 'Rejected') {
+                        $submission->reject_reason = $request->reject_reason;
+                    } else {
+                        $submission->reject_reason = null;
+                    }
+                
+                    $submission->save();
+                
+                    return response()->json(['message' => 'Status updated successfully']);
+                }
+                
+                
 }

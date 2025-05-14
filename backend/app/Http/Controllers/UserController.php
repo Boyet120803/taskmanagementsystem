@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\TaskAssignment;
-
+use App\Models\TaskSubmission;
 class UserController extends Controller
 {
     public function index()
@@ -40,31 +40,41 @@ class UserController extends Controller
     public function userTasks()
     {
         $user = Auth::user();
-        
+
         if (!$user) {
             return response()->json(['message' => 'User not authenticated'], 401);
         }
     
-        $assignment = TaskAssignment::with(['task', 'manager'])
-            ->where('user_id', $user->id)
-            ->latest() 
-            ->first();
+        $assignments = TaskAssignment::where('user_id', $user->id)
+            ->with(['task', 'manager'])
+            ->get();
     
-        if (!$assignment) {
+        if ($assignments->isEmpty()) {
             return response()->json(['message' => 'No task assigned'], 404);
         }
     
-        $data = [
-            'task_id' => $assignment->task->id,
-            'task_title' => $assignment->task->title,
-            'task_description' => $assignment->task->description,
-            'due_date' => $assignment->task->due_date,
-            'status' => $assignment->task->status,
-            'assigned_at' => $assignment->created_at->toDateTimeString(),
-            'manager_name' => $assignment->manager ? $assignment->manager->fname . ' ' . $assignment->manager->lname : 'No Manager Assigned',
-        ];
+        $data = $assignments->map(function ($assignment) use ($user) {
+            // Kunin ang latest submission ng user para sa task na 'to
+            $submission = TaskSubmission::where('user_id', $user->id)
+                            ->where('task_id', $assignment->task->id)
+                            ->latest()
+                            ->first();
+    
+            return [
+                'task_id' => $assignment->task->id,
+                'task_title' => $assignment->task->title,
+                'task_description' => $assignment->task->description,
+                'due_date' => $assignment->task->due_date,
+                'status' => $submission ? $submission->status : 'Pending', // ← dito na galing ang status!
+                'assigned_at' => $assignment->created_at->toDateTimeString(),
+                'manager_name' => $assignment->manager ? $assignment->manager->fname . ' ' . $assignment->manager->lname : 'No Manager Assigned',
+                'user_has_submitted' => $submission ? true : false,
+                'reject_reason' => $submission ? $submission->reject_reason : null,
+            ];
+        });
     
         return response()->json($data);
+        
     }
     
 
@@ -112,6 +122,48 @@ class UserController extends Controller
             'user' => $user,
         ]);
     }
+
+    public function submit(Request $request)
+            {
+                $request->validate([
+                    'task_id' => 'required|exists:tasks,id',
+                    'notes' => 'required|string',
+                    'file' => 'nullable|file|max:2048'
+                ]);
+
+                $user = auth()->user();
+
+                // Check if user already submitted this task
+                $existing = TaskSubmission::where('user_id', $user->id)
+                            ->where('task_id', $request->task_id)
+                            ->first();
+
+                if ($existing) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'You have already submitted this task.'
+                    ], 400);
+                }
+
+                $submission = new TaskSubmission();
+                $submission->user_id = $user->id;
+                $submission->task_id = $request->task_id;
+                $submission->notes = $request->notes;
+                $submission->status = 'Pending'; 
+
+                if ($request->hasFile('file')) {
+                    $path = $request->file('file')->store('task_files', 'public');
+                    $submission->file_path = $path;
+                }
+
+                $submission->save();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Task submitted successfully. Waiting for manager review.'
+                ]);
+            }
+
     
 }
 

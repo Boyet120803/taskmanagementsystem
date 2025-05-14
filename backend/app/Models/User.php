@@ -54,6 +54,11 @@ class User extends Authenticatable
             return $this->hasMany(TaskAssignment::class, 'user_id'); 
         }
 
+        public function taskSubmissions()
+        {
+            return $this->hasMany(TaskSubmission::class);
+        }
+
     /**
      * The attributes that should be hidden for serialization.
      *

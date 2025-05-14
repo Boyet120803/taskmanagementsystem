@@ -8,10 +8,28 @@ use Illuminate\Http\Request;
 class AdminTaskController extends Controller
 {
     public function index()
-        {
-            $tasks = Task::with('assignedUser')->get(); 
-            return response()->json($tasks); 
+      {
+            $tasks = Task::with(['assignedUser', 'submissions' => function($query) {
+                $query->latest()->limit(1);
+            }])->get();
+        
+            $formattedTasks = $tasks->map(function ($task) {
+                $latestSubmission = $task->submissions->first();
+                return [
+                    'id' => $task->id,
+                    'title' => $task->title,
+                    'description' => $task->description,
+                    'status' => $latestSubmission ? $latestSubmission->status : 'Pending',
+                    'assigned_user' => $task->assignedUser 
+                        ? $task->assignedUser->fname . ' ' . $task->assignedUser->lname 
+                        : 'Unassigned',
+                    'due_date' => $task->due_date,
+                ];
+            });
+        
+            return response()->json($formattedTasks);
         }
+    
 
     public function store(Request $request){
         $request->validate([
@@ -45,7 +63,6 @@ class AdminTaskController extends Controller
             $validated = $request->validate([
                 'title' => 'required|string|max:255',
                 'description' => 'required|string',
-                'status' => 'required|string|in:Pending,In Progress,Completed',
                 'due_date' => 'nullable|date',
                 'assign_to' => 'nullable|exists:users,id',
             ]);
@@ -61,14 +78,29 @@ class AdminTaskController extends Controller
         }
     }
 
-    public function show($id){
-        $task = Task::find($id);
-
-        if(!$task) {
-            return response()->json(['message' => 'Task not found'], 404);
+    public function show($id)
+        {
+            $task = Task::with(['submissions' => function($query) {
+                $query->latest()->limit(1); // Kunin ang latest submission
+            }])->find($id);
+        
+            if (!$task) {
+                return response()->json(['message' => 'Task not found'], 404);
+            }
+        
+            $latestSubmission = $task->submissions->first();
+        
+            return response()->json([
+                'id' => $task->id,
+                'title' => $task->title,
+                'description' => $task->description,
+                'status' => $latestSubmission ? $latestSubmission->status : 'Pending',
+                'due_date' => $task->due_date,
+                'assigned_user' => $task->assignedUser 
+                    ? $task->assignedUser->fname . ' ' . $task->assignedUser->lname 
+                    : 'Unassigned',
+            ]);
         }
-        return response()->json($task);
-    }
 
     public function destroy($id){
         $task = Task::find($id);

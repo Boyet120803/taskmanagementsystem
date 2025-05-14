@@ -51,9 +51,9 @@ Route::middleware(['auth:sanctum', 'role:1'])->group(function() {
   
     Route::get('/manager-team-members', [ManagerController::class, 'getTeamMembers']);
     Route::post('/assign-task', [ManagerController::class, 'assignTaskToTeam']);
+    Route::get('/submission/{task_id}/{user_id}', [ManagerController::class, 'showUserSubmission']);
+    Route::put('submissions/{id}/update-status', [ManagerController::class, 'updateStatus']);
 });
-
-
 
 
 Route::middleware(['auth:sanctum', 'role:2'])->group(function() {
@@ -63,5 +63,7 @@ Route::middleware(['auth:sanctum', 'role:2'])->group(function() {
     Route::get('/user-tasks', [UserController::class, 'userTasks']);
     Route::get('/userprofile', [UserController::class, 'userprofile']);
     Route::put('/updateprofile', [UserController::class, 'update']);
+    Route::post('/submit-user-task', [UserController::class, 'submit']);
+
 });
 

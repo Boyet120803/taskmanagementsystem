@@ -15,9 +15,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
  
-
-  
-
   <style>
       @font-face {
         font-family: 'BodoniFLF';
