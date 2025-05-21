@@ -6,7 +6,7 @@
 <style>
   @media screen and (min-width: 360px) and (max-width: 811px) {
   .main-content {
-    margin-top: 130px;
+    margin-top: 70px;
   }
 
   .d-flex.justify-content-between.align-items-center.mb-2 {
