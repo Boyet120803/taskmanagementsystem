@@ -45,7 +45,7 @@
     }
 
 
-  @media screen and(min-width: 360px) and (max-width: 811px) {
+  @media screen and (min-width: 360px) and (max-width: 811px) {
 
     .sidebar {
       left: -250px;

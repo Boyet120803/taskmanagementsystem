@@ -11,7 +11,7 @@
   h5{
     font-size: 1rem;
   }
-  @media screen and(min-width: 360px) and (max-width: 811px) {
+  @media screen and (min-width: 360px) and (max-width: 811px) {
       .main-content{
         margin-top:120px;
       }
