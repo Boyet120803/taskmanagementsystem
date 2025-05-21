@@ -11,9 +11,10 @@ class AdminController extends Controller
 {
     public function index()
     {
-       return response()->json([
-         'users' => User::all(),
-       ]);
+        $users = User::whereIn('role', [1, 2])->get();
+        return response()->json([
+            'users' => $users,
+        ]);
     }
 
         public function login(Request $request)
