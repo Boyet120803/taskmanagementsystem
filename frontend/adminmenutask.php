@@ -510,7 +510,10 @@ document.getElementById('addTaskForm').addEventListener('submit', function (e) {
 });
   
 
-
+document.addEventListener('DOMContentLoaded', function () {
+  fetchTasks(); // kailangan ito para mag-run sa pag-load ng page
+  fetchUsers(); // kung gusto mo rin i-load yung mga users sa dropdown
+});
 
 window.onload = function() {
   fetchUsers();
