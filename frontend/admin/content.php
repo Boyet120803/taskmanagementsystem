@@ -13,7 +13,7 @@
   }
   @media screen and (min-width: 360px) and (max-width: 811px) {
       .main-content{
-        margin-top:105px;
+        margin-top:90px;
       }
     }
 </style>
