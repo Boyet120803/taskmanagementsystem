@@ -4,7 +4,7 @@
 <?php require_once('admin/js.php') ?>
 <?php require_once('admin/footer.php') ?>
 <style>
-  @media screen and (min-width: 360px) and (max-width: 811px) {
+  @media (min-width: 400px) and (max-width: 991px) {
   .main-content{
     margin-top:100px;
   }
@@ -171,16 +171,17 @@
 
 
 <script>
+  // Function to filter tasks on the frontend
  document.getElementById('taskSearchInput').addEventListener('input', function () {
-      const searchValue = this.value.toLowerCase(); 
+      const searchValue = this.value.toLowerCase(); // kunin ang input at gawing lowercase
       const rows = document.querySelectorAll('#taskTableBody tr');
 
       rows.forEach(row => {
         const rowText = row.textContent.toLowerCase();
         if (rowText.includes(searchValue)) {
-          row.style.display = ''; 
+          row.style.display = ''; // show
         } else {
-          row.style.display = 'none';
+          row.style.display = 'none'; // hide
         }
       });
   });
@@ -254,7 +255,7 @@
   }
 
   // Fetch Users for Assigning Tasks
-function fetchUsers() {
+  function fetchUsers() {
     const token = localStorage.getItem('auth_token');
     const userSelect = document.getElementById('addAssignedTo');
 
@@ -265,6 +266,7 @@ function fetchUsers() {
         }
     })
     .then(response => {
+        console.log(response); 
         if (!response.ok) {
             throw new Error(`Failed to fetch users. Status: ${response.status}`);
         }
@@ -273,17 +275,8 @@ function fetchUsers() {
     .then(result => {
         console.log("Fetched users:", result);
 
-        // Clear options first
-        userSelect.innerHTML = '';
+        userSelect.innerHTML = '<option value="" disabled selected>Select User</option>';
 
-        // Add default option
-        const defaultOption = document.createElement('option');
-        defaultOption.disabled = true;
-        defaultOption.selected = true;
-        defaultOption.textContent = 'Select User';
-        userSelect.appendChild(defaultOption);
-
-        // Append users
         result.forEach(user => {
             if (user.role === 1 || user.role === 2) {
                 const option = document.createElement('option');
@@ -297,11 +290,6 @@ function fetchUsers() {
         console.error('Error fetching users:', error);
     });
 }
-// Call fetchUsers() when modal is fully shown
-const addTaskModal = document.getElementById('addTaskModal');
-addTaskModal.addEventListener('shown.bs.modal', function () {
-    fetchUsers();
-});
 
 // Show Task Details
   function showTask(id) {
@@ -510,10 +498,7 @@ document.getElementById('addTaskForm').addEventListener('submit', function (e) {
 });
   
 
-document.addEventListener('DOMContentLoaded', function () {
-  fetchTasks(); // kailangan ito para mag-run sa pag-load ng page
-  fetchUsers(); // kung gusto mo rin i-load yung mga users sa dropdown
-});
+
 
 window.onload = function() {
   fetchUsers();
