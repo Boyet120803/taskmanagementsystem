@@ -74,18 +74,20 @@
           if (result.ok) {
             localStorage.setItem('auth_token', data.token);
             localStorage.setItem('user_role', data.role);
+
+            const role = Number(data.role);
     
             message.innerHTML = `<span class="text-success">${data.message}</span>`;
             
             setTimeout(() => {
-              if (data.role === 0) {
+              if (role === 0) {
                 window.location.href = 'admindashboard.php';
-              } else if (data.role === 1) {
+              } else if (role === 1) {
                 window.location.href = 'managerdashboard.php';
-              } else if (data.role === 2) {
+              } else if (role === 2) {
                 window.location.href = 'regularuserdashboard.php';
               } else {
-                message.innerHTML = `<span class="text-danger">Unknown role: ${data.role}</span>`;
+                message.innerHTML = `<span class="text-danger">Unknown role: ${role}</span>`;
               }
             }, 1000);
           } else {
