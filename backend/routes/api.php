@@ -42,6 +42,7 @@ Route::middleware(['auth:sanctum', 'role:0'])->group(function() {
 });
 
 
+
 Route::middleware(['auth:sanctum', 'role:1'])->group(function() {
     Route::get('/managers', [ManagerController::class, 'index']);
     Route::post('/logout', [ManagerController::class, 'logout']);
