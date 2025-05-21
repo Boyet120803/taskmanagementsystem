@@ -254,7 +254,7 @@
         });
   }
 
- // Fetch Users for Assigning Tasks
+  // Fetch Users for Assigning Tasks
   function fetchUsers() {
     const token = localStorage.getItem('auth_token');
     const userSelect = document.getElementById('addAssignedTo');
@@ -272,20 +272,20 @@
         }
         return response.json();
     })
-    .then(result => {
-      console.log("Fetched users:", result);
+      .then(result => {
+        console.log("Fetched users:", result);
 
-      userSelect.innerHTML = '<option value="" disabled selected>Select User</option>';
+        userSelect.innerHTML = '<option value="" disabled selected>Select User</option>';
 
-      (result.users || []).forEach(user => {
-          if (user.role === 1 || user.role === 2) {
-              const option = document.createElement('option');
-              option.value = user.id;
-              option.textContent = `${user.fname} ${user.lname} (${user.role === 1 ? 'Manager' : 'User'})`;
-              userSelect.appendChild(option);
-          }
-      });
-  })
+        result.users.forEach(user => {
+            if (user.role === 1 || user.role === 2) {
+                const option = document.createElement('option');
+                option.value = user.id;
+                option.textContent = `${user.fname} ${user.lname} (${user.role === 1 ? 'Manager' : 'User'})`;
+                userSelect.appendChild(option);
+            }
+        });
+    })
     .catch(error => {
         console.error('Error fetching users:', error);
     });
