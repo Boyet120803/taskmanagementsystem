@@ -254,7 +254,7 @@
   }
 
   // Fetch Users for Assigning Tasks
-  function fetchUsers() {
+ function fetchUsers() {
     const token = localStorage.getItem('auth_token');
     const userSelect = document.getElementById('addAssignedTo');
 
@@ -265,7 +265,6 @@
         }
     })
     .then(response => {
-        console.log(response); 
         if (!response.ok) {
             throw new Error(`Failed to fetch users. Status: ${response.status}`);
         }
@@ -289,6 +288,9 @@
         console.error('Error fetching users:', error);
     });
 }
+
+// Call on page load
+document.addEventListener('DOMContentLoaded', fetchUsers);
 
 // Show Task Details
   function showTask(id) {
