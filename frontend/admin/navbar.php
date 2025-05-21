@@ -45,8 +45,8 @@
     }
 
 
-  @media (min-width: 340px) and (max-width: 991px) {
-  
+  @media screen and(min-width: 360px) and (max-width: 811px) {
+
     .sidebar {
       left: -250px;
       transition: left 0.3s ease;
