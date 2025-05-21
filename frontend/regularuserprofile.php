@@ -4,7 +4,7 @@
 <?php require_once('regularuser/js.php') ?>
 <?php require_once('regularuser/footer.php') ?>
 <style>
-  @media (min-width: 400px) and (max-width: 991px) {
+  @media screen and (min-width: 360px) and (max-width: 811px) {
     .main-content{
       margin-top: 100px;
     }

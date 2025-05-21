@@ -4,7 +4,7 @@
 <?php require_once ('admin/js.php') ?>
 <?php require_once ('admin/footer.php') ?>
 <style>
-  @media (min-width: 400px) and (max-width: 991px) {
+  @media screen and (min-width: 360px) and (max-width: 811px) {
   .main-content {
     margin-top: 130px;
   }

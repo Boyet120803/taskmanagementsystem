@@ -17,7 +17,7 @@
     #teamTable tbody tr:hover {
         background-color: #2a2a3b !important;
     }
-    @media (min-width: 400px) and (max-width: 991px) {
+    @media screen and (min-width: 360px) and (max-width: 811px) {
         .main-content {
            margin-top:100px;
         }
