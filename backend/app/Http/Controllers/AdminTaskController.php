@@ -13,7 +13,7 @@ class AdminTaskController extends Controller
                 $query->latest()->limit(1);
             }])->get();
         
-            $formattedTasks = $tasks->map(function ($task) {
+            $formattedTasks = $tasks->map(function ($task) { //I-transform or i-modify ang matag item (task) sa collection.
                 $latestSubmission = $task->submissions->first();
                 return [
                     'id' => $task->id,
@@ -131,6 +131,7 @@ class AdminTaskController extends Controller
             $users = User::whereIn('role', [1, 2])->get();
             return response()->json($users);
         }
+
 
 
 }

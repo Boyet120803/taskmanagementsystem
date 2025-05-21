@@ -3,22 +3,62 @@
 <?php require_once('admin/navbar.php') ?>
 <?php require_once('admin/js.php') ?>
 <?php require_once('admin/footer.php') ?>
+<style>
+  @media (min-width: 400px) and (max-width: 991px) {
+  .main-content{
+    margin-top:100px;
+  }
+  .main-content .d-flex {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
+  .main-content .d-flex > * {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .main-content .input-group {
+    max-width: 100% !important;
+  }
+
+  #taskTable {
+    font-size: 13px;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  #taskTable th,
+  #taskTable td {
+    min-width: 100px;
+  }
+}
+
+</style>
 <div class="main-content">
   <div class="container mt-1">
-    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addTaskModal">
-      ➕ Add New Task
-    </button>
-    <table id="taskTable" class="table table-striped table-bordered">
-      <thead>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTaskModal">
+        ➕ Add New Task
+      </button>
+      <!-- Search bar UI only -->
+      <div class="input-group" style="max-width: 300px;">
+        <input type="text" class="form-control" placeholder="Search tasks..." id="taskSearchInput">
+      
+      </div>
+    </div>
+
+    <table id="taskTable" class="table table-hover table-bordered align-middle">
+      <thead class="table-primary">
         <tr>
-          <th>ID</th>
-          <th>Task Title</th>
-          <th>Description</th>
-          <th>Status</th>
-          <th>Assigned To</th>
-          <th>Due Date</th>
-          <th>Actions</th>
+          <th scope="col">ID</th>
+          <th scope="col">Task Title</th>
+          <th scope="col">Description</th>
+          <th scope="col">Status</th>
+          <th scope="col">Assigned To</th>
+          <th scope="col">Due Date</th>
+          <th scope="col" style="width: 140px;">Actions</th>
         </tr>
       </thead>
       <tbody id="taskTableBody">
@@ -26,6 +66,7 @@
     </table>
   </div>
 </div>
+
 
 <!-- Add Task Modal -->
 <div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
@@ -130,67 +171,86 @@
 
 
 <script>
+ document.getElementById('taskSearchInput').addEventListener('input', function () {
+      const searchValue = this.value.toLowerCase(); 
+      const rows = document.querySelectorAll('#taskTableBody tr');
+
+      rows.forEach(row => {
+        const rowText = row.textContent.toLowerCase();
+        if (rowText.includes(searchValue)) {
+          row.style.display = ''; 
+        } else {
+          row.style.display = 'none';
+        }
+      });
+  });
   // Fetch Tasks 
   function fetchTasks() {
-    const token = localStorage.getItem('auth_token');
-    const taskTableBody = document.getElementById('taskTableBody');
+        const token = localStorage.getItem('auth_token');
+        const taskTableBody = document.getElementById('taskTableBody');
 
-    fetch('http://127.0.0.1:8000/api/tasks', {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json'
-      }
-    })
-    .then(response => response.json().then(data => ({ ok: response.ok, data })))
-    .then(result => {
-      if (result.ok) {
-        const tasks = Array.isArray(result.data) ? result.data : Object.values(result.data);
+        fetch('http://127.0.0.1:8000/api/tasks', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json'
+          }
+        })
+        .then(response => response.json().then(data => ({ ok: response.ok, data })))
+        .then(result => {
+          if (result.ok) {
+            const tasks = Array.isArray(result.data) ? result.data : Object.values(result.data);
 
-        taskTableBody.innerHTML = '';
-        tasks.forEach(task => {
-          taskTableBody.innerHTML += `
-            <tr>
-              <td>${task.id}</td>
-              <td>${task.title}</td>
-              <td>${task.description}</td>
-             <td>
-                <span class="badge 
-                  ${task.status === 'Completed' ? 'bg-success' : 
-                    task.status === 'In Progress' ? 'bg-warning text-dark' : 
-                    task.status === 'Rejected' ? 'bg-danger' : 
-                    task.status === 'Pending' ? 'bg-secondary' : 
-                    task.status === 'No Submission' ? 'bg-dark text-white' : 
-                    'bg-light text-dark'}">
-                  ${task.status || 'No Status'}
-                </span>
-              </td>
-
-              <td>${task.assigned_user}</td>
-              <td>${task.due_date || '—'}</td>
-              <td>
-                <button class="btn btn-info btn-sm" onclick="showTask(${task.id})" title="Show">
-                    <i class="bi bi-eye"></i>
-                </button>
-                <button class="btn btn-warning btn-sm" onclick="editTask(${task.id})" title="Edit">
-                    <i class="bi bi-pencil-square"></i>
-                </button>
-                <button class="btn btn-danger btn-sm" onclick="deleteTask(${task.id})" title="Delete">
-                    <i class="bi bi-trash"></i>
-                </button>
-            </td>
-
-            </tr>
-          `;
+            if (tasks.length === 0) {
+              taskTableBody.innerHTML = `
+                <tr>
+                  <td colspan="7" class="text-center text-muted fst-italic">
+                    No tasks available.
+                  </td>
+                </tr>
+              `;
+            } else {
+              taskTableBody.innerHTML = '';
+              tasks.forEach((task, index) => {
+                taskTableBody.innerHTML += `
+                  <tr>
+                    <td>${index + 1}</td>
+                    <td class="text-truncate" style="max-width: 200px;" title="${task.title}">${task.title}</td>
+                    <td class="text-truncate" style="max-width: 300px;" title="${task.description}">${task.description}</td>
+                    <td>
+                      <span class="badge 
+                        ${task.status === 'Completed' ? 'bg-success' : 
+                          task.status === 'In Progress' ? 'bg-warning text-dark' : 
+                          task.status === 'Rejected' ? 'bg-danger' : 
+                          task.status === 'Pending' ? 'bg-secondary' : 
+                          task.status === 'No Submission' ? 'bg-dark text-white' : 
+                          'bg-light text-dark'}">
+                        ${task.status || 'No Status'}
+                      </span>
+                    </td>
+                    <td>${task.assigned_user || 'Unassigned'}</td>
+                    <td>${task.due_date || '—'}</td>
+                    <td>
+                      <button class="btn btn-info btn-sm me-1" onclick="showTask(${task.id})" title="Show">
+                          <i class="bi bi-eye"></i>
+                      </button>
+                      <button class="btn btn-warning btn-sm me-1" onclick="editTask(${task.id})" title="Edit">
+                          <i class="bi bi-pencil-square"></i>
+                      </button>
+                      <button class="btn btn-danger btn-sm" onclick="deleteTask(${task.id})" title="Delete">
+                          <i class="bi bi-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                `;
+              });
+            }
+          } else {
+            console.error('Failed to fetch tasks:', result.data);
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching tasks:', error);
         });
-
-        $('#taskTable').DataTable();
-      } else {
-        console.error('Failed to fetch tasks:', result.data);
-      }
-    })
-    .catch(error => {
-      console.error('Error fetching tasks:', error);
-    });
   }
 
   // Fetch Users for Assigning Tasks
@@ -301,6 +361,7 @@ function editTask(id) {
 // Edit Task Form
 document.getElementById('editTaskForm').addEventListener('submit', function (e) {
   e.preventDefault();
+
   const token = localStorage.getItem('auth_token');
   const id = document.getElementById('editTaskId').value;
 
@@ -311,22 +372,54 @@ document.getElementById('editTaskForm').addEventListener('submit', function (e) 
     assign_to: document.getElementById('editAssignedTo').value
   };
 
-  fetch(`http://127.0.0.1:8000/api/tasks/${id}`,
-   {
-      method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(updatedTask)
+  fetch(`http://127.0.0.1:8000/api/tasks/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(updatedTask)
   })
-  .then(res => res.json())
-  .then(result => {
-    $('#editTaskModal').modal('hide');
-    fetchTasks();
+  .then(function(response) {
+    return response.json().then(function(result) {
+      if (response.ok) {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Task updated successfully",
+          showConfirmButton: false,
+          timer: 1500
+        });
+
+        $('#editTaskModal').modal('hide');
+        fetchTasks();
+      } else {
+        let errorMsg = 'Something went wrong.';
+        if (result.errors) {
+          errorMsg = Object.values(result.errors).join('\n');
+        } else if (result.message) {
+          errorMsg = result.message;
+        }
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Update Failed',
+          text: errorMsg
+        });
+      }
+    });
+  })
+  .catch(function(error) {
+    console.error('Update error:', error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Server Error',
+      text: 'Something went wrong. Please try again later.'
+    });
   });
 });
+
       function deleteTask(id) {
         Swal.fire({
           title: 'Are you sure?',
@@ -402,10 +495,10 @@ document.getElementById('addTaskForm').addEventListener('submit', function (e) {
     console.error('Error adding task:', error);
   });
 });
-// document.addEventListener('DOMContentLoaded', function () {
-//   fetchTasks();
-//   fetchUsers(); 
-// });
+  
+
+
+
 window.onload = function() {
   fetchUsers();
   fetchTasks();

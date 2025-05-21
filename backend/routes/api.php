@@ -7,7 +7,7 @@ use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminTaskController;
 use App\Http\Controllers\TeamController;
-
+use App\Http\Controllers\MailController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -35,6 +35,10 @@ Route::middleware(['auth:sanctum', 'role:0'])->group(function() {
     Route::post('/assign-task', [AdminTaskController::class, 'assignTask']);
     Route::get('/assignable-users', [AdminTaskController::class, 'getAssignableUsers']);
     Route::get('/profile', [AdminController::class, 'profile']);
+    Route::get('/getusers', [AdminController::class, 'getUsers']);
+    Route::get('/getpending', [AdminController::class, 'getPendingTaskCount']);
+    Route::get('/getcompleted', [AdminController::class, 'getCompleteTaskCount']);
+    Route::get('/gettotaltask', [AdminController::class, 'getTotalTaskCount']);
 });
 
 
@@ -53,6 +57,11 @@ Route::middleware(['auth:sanctum', 'role:1'])->group(function() {
     Route::post('/assign-task', [ManagerController::class, 'assignTaskToTeam']);
     Route::get('/submission/{task_id}/{user_id}', [ManagerController::class, 'showUserSubmission']);
     Route::put('submissions/{id}/update-status', [ManagerController::class, 'updateStatus']);
+    Route::get('/completed-task-count', [ManagerController::class, 'getCompletedTaskCount']);
+    Route::get('/pending-task-count', [ManagerController::class, 'getPendingTaskCount']);
+    Route::get('/total-task-count', [ManagerController::class, 'getTotalTaskCount']);
+
+    Route::post('/send-task-email', [MailController::class, 'sendTaskMail']);
 });
 
 

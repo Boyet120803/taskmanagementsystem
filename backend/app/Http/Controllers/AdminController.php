@@ -3,19 +3,18 @@
 namespace App\Http\Controllers;
 use illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\TaskSubmission;
+use App\Models\Task;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $searchTerm = $request->input('search', '');
-        $users = User::where('fname', 'LIKE', "%{$searchTerm}%")
-            ->orWhere('lname', 'LIKE', "%{$searchTerm}%")
-            ->orWhere('email', 'LIKE', "%{$searchTerm}%")
-            ->get();
-    
-        return response()->json(['users' => $users]);
+        $users = User::whereIn('role', [1, 2])->get();
+        return response()->json([
+            'users' => $users,
+        ]);
     }
 
         public function login(Request $request)
@@ -52,7 +51,12 @@ class AdminController extends Controller
                 'contact' => 'required|string|max:11',
                 'birthdate' => 'required|date',
                 'age' => 'required|integer|min:0',
+                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             ]);
+
+            if ($request->hasFile('image')) {
+                $image = $request->file('image')->store('uploads', 'public');
+            }
         
             $user = User::create([
                 'email' => $request->email,
@@ -66,6 +70,7 @@ class AdminController extends Controller
                 'contact' => $request->contact,
                 'birthdate' => $request->birthdate,
                 'age' => $request->age,
+                'image' => $image ?? null,
             ]);
         
             return response()->json([
@@ -98,6 +103,12 @@ class AdminController extends Controller
                 'contact' => 'string|max:11',
                 'birthdate' => 'date',
                 'age' => 'integer|min:0',
+             ]);
+
+             $user->update($request->all());
+             return response()->json([
+                'message' => 'User updated successfully',
+                'user' => $user,
              ]);
         }
 
@@ -136,6 +147,42 @@ class AdminController extends Controller
             ]);
         }
         
+        public function getUsers()
+        {
+            $users = User::whereIn('role', [1, 2])->get();
+            return response()->json([
+                'status' => 'success',
+                'total_users' => $users->count(), // <-- ito ang kulang
+                'users' => $users,
+            ]);
+        }
+
+        public function getPendingTaskCount()
+        {
+            $count = TaskSubmission::where('status', 'Pending')->count();
+
+            return response()->json([
+                'pending_count' => $count,
+            ]);
+        }
+
+        public function getCompleteTaskCount()
+        {
+            $count = TaskSubmission::where('status', 'Completed')->count();
+
+            return response()->json([
+                'completed_count' => $count,
+            ]);
+        }
+
+        public function getTotalTaskCount()
+        {
+            $count = Task::count(); // Count lahat ng tasks
+
+            return response()->json([
+                'total_task_count' => $count,
+            ]);
+        }
        
         
 

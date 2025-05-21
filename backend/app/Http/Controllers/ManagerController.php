@@ -80,7 +80,17 @@ class ManagerController extends Controller
                 'manager_id' => $manager->id, 
             ]);
         
-            return response()->json(['message' => 'Task assigned successfully.']);
+                $task = Task::find($validated['task_id']);
+                $user = User::find($validated['user_id']);
+
+                return response()->json([
+                    'message' => 'Task assigned successfully.',
+                    'task' => [
+                        'title' => $task->title,
+                        'description' => $task->description,
+                        'email' => $user->email,
+                    ]
+                ]);
         }
         
 
@@ -99,7 +109,7 @@ class ManagerController extends Controller
                 {
                     $submission = TaskSubmission::where('task_id', $task_id)
                         ->where('user_id', $user_id)
-                        ->first(); // ✅ single record
+                        ->first(); 
                 
                     if (!$submission) {
                         return response()->json(['message' => 'No submission found.'], 404);
@@ -134,6 +144,53 @@ class ManagerController extends Controller
                 
                     return response()->json(['message' => 'Status updated successfully']);
                 }
+
+
+                public function getCompletedTaskCount()
+                    {
+                        $managerId = Auth::id();
+                        $teamMembers = TeamMember::where('manager_id', $managerId)->get();
+                        $userIds = [];
+                        foreach ($teamMembers as $member) {
+                            $userIds[] = $member->user_id;
+                        }
+                        $completedCount = TaskSubmission::where('status', 'Completed')
+                            ->whereIn('user_id', $userIds)
+                            ->count();
+
+                        return response()->json(['completed_count' => $completedCount]);
+                    }
+
+                    public function getPendingTaskCount()
+                        {
+                            $managerId = Auth::id();
+                            $teamMembers = TeamMember::where('manager_id', $managerId)->get();
+
+                            $userIds = [];
+                            foreach ($teamMembers as $member) {
+                                $userIds[] = $member->user_id;
+                            }
+
+                            $pendingCount = TaskSubmission::where('status', 'Pending')
+                                ->whereIn('user_id', $userIds)
+                                ->count();
+
+                            return response()->json(['pending_count' => $pendingCount]);
+                        }
+
+
+                        public function getTotalTaskCount()
+                        {
+                            $managerId = Auth::id();
+                            $teamMembers = TeamMember::where('manager_id', $managerId)->get();
+                            $userIds = [];
+                            foreach ($teamMembers as $member) {
+                                $userIds[] = $member->user_id;
+                            }
+                            $totalCount = TaskSubmission::whereIn('user_id', $userIds)->count();
+                        
+                            return response()->json(['total_count' => $totalCount]);
+                        }
                 
                 
 }

@@ -17,6 +17,12 @@
     #teamTable tbody tr:hover {
         background-color: #2a2a3b !important;
     }
+    @media (min-width: 400px) and (max-width: 991px) {
+        .main-content {
+           margin-top:100px;
+        }
+
+    }
 </style>
 
 <div class="main-content">
@@ -27,7 +33,7 @@
                 <label for="userSelect" class="form-label">Select User to Add to Team</label>
                 <select class="form-select" style="background-color: #1c1c27; color: #808080" id="userSelect">
                     <option value="" disabled selected> Select a User</option>
-                    <!-- Options will be filled by JS -->
+                   <!-- content ari gawas -->
                 </select>
                 <button id="assignToTeamBtn" class="btn btn-primary mt-3">Assign to Team</button>
             </div>

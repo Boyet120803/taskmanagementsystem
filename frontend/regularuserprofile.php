@@ -3,7 +3,13 @@
 <?php require_once('regularuser/navbar.php') ?>
 <?php require_once('regularuser/js.php') ?>
 <?php require_once('regularuser/footer.php') ?>
-
+<style>
+  @media (min-width: 400px) and (max-width: 991px) {
+    .main-content{
+      margin-top: 100px;
+    }
+  }
+</style>
 <div class="main-content">
   <div class="container mt-1">
     <div class="card border-0 rounded-4 bg-transparent">
@@ -149,6 +155,10 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="col-md-3 mb-3">
         <strong style="color: #808080;">Email:</strong>
         <p style="color: #808080;">${data.email}</p>
+      </div>
+      <div class="col-md-3 mb-3">
+        <strong style="color: #808080;">Profile Image:</strong><br>
+        <img src="http://127.0.0.1:8000/storage/${data.image}" alt="Profile Image" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;">
       </div>
     `;
 

@@ -54,7 +54,6 @@ class UserController extends Controller
         }
     
         $data = $assignments->map(function ($assignment) use ($user) {
-            // Kunin ang latest submission ng user para sa task na 'to
             $submission = TaskSubmission::where('user_id', $user->id)
                             ->where('task_id', $assignment->task->id)
                             ->latest()
@@ -78,7 +77,7 @@ class UserController extends Controller
     }
     
 
-        public function userprofile(){
+     public function userprofile(){
         $user = auth()->user();
         return response()->json([
                 'fname' => $user->fname,
@@ -90,6 +89,7 @@ class UserController extends Controller
                 'birthdate' => $user->birthdate,
                 'age' => $user->age,
                 'email' => $user->email,
+                'image' => $user->image,
         ]);
 
         return response()->json($user);
@@ -111,6 +111,7 @@ class UserController extends Controller
             'birthdate' => 'required|date',
             'age' => 'required|integer|min:0',
             'email' => 'required|email|max:255',
+            
         ]);
     
        

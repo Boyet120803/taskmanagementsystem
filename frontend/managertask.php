@@ -17,25 +17,98 @@
     #taskTable tbody tr:hover {
         background-color: #2a2a3b !important;
     }
+
+    @media (min-width: 400px) and (max-width: 991px) {
+
+      .main-content {
+       margin-top:100px;
+      }
+      .main-content .d-flex {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .main-content .d-flex button {
+        width: 100%;
+        margin-bottom: 10px;
+        text-align: left;
+      }
+
+      #taskTable {
+        font-size: 13px;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+
+      #taskTable th,
+      #taskTable td {
+        min-width: 100px;
+      }
+    }
+
 </style>
+
 <div class="main-content">
-    <div class="container mt-1">
-        <h3 class="mb-2" style="color: #808080;">Task</h3>
-        <table class="table mt-4" id="taskTable">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Assign To</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Tasks will be loaded here -->
-            </tbody>
-        </table>
+  <div class="container mt-1">
+    <div class="d-flex justify-content-between align-items-center">
+      <h4 class="mb-2" style="color: #808080;">Task</h4>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTaskModal">Add Task</button>
     </div>
+
+    <table class="table mt-4" id="taskTable">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Assign To</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Tasks will be loaded here -->
+      </tbody>
+    </table>
+  </div>
 </div>
+
+
+<!-- Add Task Modal -->
+<div class="modal fade" id="addTaskModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-light">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Task</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addTaskForm">
+          <div class="mb-3">
+            <label for="taskTitle" class="form-label">Title</label>
+            <input type="text" class="form-control" id="taskTitle" placeholder="Enter task title">
+          </div>
+          <div class="mb-3">
+            <label for="taskDescription" class="form-label">Description</label>
+            <textarea class="form-control" id="taskDescription" rows="3" placeholder="Enter task description"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="assignTo" class="form-label">Assign To</label>
+            <select class="form-select" id="assignTo">
+              <option selected disabled>-- Select User --</option>
+              <!-- Populate options dynamically via JS if needed -->
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <!-- Wala pa tong functionality -->
+        <button type="button" class="btn btn-primary">Save Task</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- View Submission Modal -->
 <div class="modal fade" id="viewSubmissionModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -177,6 +250,27 @@ function assignTask(taskId) {
                 timer: 1500,
                 showConfirmButton: false
             });
+          fetch('http://127.0.0.1:8000/api/send-task-email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+            },
+            body: JSON.stringify({
+                email: data.task.email, 
+                title: data.task.title || "You have a new task.",
+                description: data.task.description || "Please complete the assigned task as soon as possible."
+            })
+        })
+        .then(res => res.json())
+        .then(mailResponse => {
+            if(mailResponse.success) {
+                console.log('Mail sent successfully');
+            } else {
+                console.error('Mail sending failed:', mailResponse.error); 
+            }
+        })
+        .catch(err => console.error('Mail error:', err));
         } else {
             Swal.fire({
                 icon: 'error',

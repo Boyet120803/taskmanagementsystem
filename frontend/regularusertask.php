@@ -4,6 +4,31 @@
 <?php require_once('regularuser/js.php') ?>
 <?php require_once('regularuser/footer.php') ?>
 <style>
+
+  @media (min-width: 400px) and (max-width: 991px) {
+      .table td, .table th {
+        white-space: nowrap;
+        font-size: 0.9rem;
+      }
+
+      .table-responsive {
+        overflow-x: auto;
+      }
+
+      .modal-content {
+        font-size: 0.9rem;
+      }
+
+      .btn {
+        font-size: 0.85rem;
+        padding: 5px 10px;
+      }
+
+      h3 {
+        font-size: 1.2rem;
+      }
+    }
+
   .btn-no-arrow::after {
   display: none !important;
 }
@@ -20,13 +45,38 @@
   background:white;
  }
  
+ @media print {
+    body * {
+      visibility: hidden;
+    }
+
+    .printable-table, .printable-table * {
+      visibility: visible;
+    }
+
+    .printable-table {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+
+    .btn, .dropdown, .modal {
+      display: none !important;
+    }
+  }
 
 </style>
 <div class="main-content">
-  <div class="container mt-4">
-    <h3 class="mb-4" style="color: #808080;">Task</h3>
-
-    <table class="table table-bordered text-white">
+  <div class="container mt-4 printable-table">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3 class="mb-0" style="color: #808080;">Task</h3>
+      <button onclick="window.print()" class="btn btn-outline-primary">
+        <i class="bi bi-printer"></i> Print
+      </button>
+    </div>
+   <div class="table-responsive">
+     <table class="table table-bordered text-white">
       <thead class="table-dark">
         <tr>
           <th>Title</th>
@@ -38,9 +88,11 @@
         </tr>
       </thead>
       <tbody id="taskTableBody"></tbody>
-    </table>
+     </table>
+    </div>
   </div>
 </div>
+
 
 <!-- Modal -->
 <div class="modal fade" id="startTaskModal" tabindex="-1">
