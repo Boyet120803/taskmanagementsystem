@@ -4,7 +4,7 @@
 <?php require_once('admin/js.php') ?>
 <?php require_once('admin/footer.php') ?>
 <style>
-  @media (min-width: 400px) and (max-width: 991px) {
+  @media screen and (min-width: 360px) and (max-width: 811px) {
   .main-content{
     margin-top:100px;
   }
@@ -272,12 +272,12 @@
         }
         return response.json();
     })
-    .then(result => {
+      .then(result => {
         console.log("Fetched users:", result);
 
         userSelect.innerHTML = '<option value="" disabled selected>Select User</option>';
 
-        result.forEach(user => {
+        result.users.forEach(user => {
             if (user.role === 1 || user.role === 2) {
                 const option = document.createElement('option');
                 option.value = user.id;

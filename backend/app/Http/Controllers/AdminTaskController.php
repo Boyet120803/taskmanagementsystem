@@ -129,7 +129,9 @@ class AdminTaskController extends Controller
         public function getAssignableUsers()
         {
             $users = User::whereIn('role', [1, 2])->get();
-            return response()->json($users);
+            return response()->json([
+                'users' => $users,
+            ]);
         }
 
 
