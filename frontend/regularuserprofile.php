@@ -103,7 +103,7 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("http://127.0.0.1:8000/api/userprofile", {
+  fetch("https://backend.bdedal.online/api/userprofile", {
     method: "GET",
     headers: {
       "Authorization": `Bearer ${localStorage.getItem("auth_token")}`,
@@ -196,7 +196,7 @@ document.getElementById("editProfileForm").addEventListener("submit", function (
     email: document.getElementById("editEmail").value,
   };
 
-  fetch("http://127.0.0.1:8000/api/updateprofile", {
+  fetch("https://backend.bdedal.online/api/updateprofile", {
     method: "PUT",
     headers: {
       "Authorization": `Bearer ${localStorage.getItem("auth_token")}`,

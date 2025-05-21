@@ -71,7 +71,7 @@
 <!-- JS to Fetch and Update Completed Tasks -->
 <script>
   // Completed Tasks Count
-    fetch('http://127.0.0.1:8000/api/completed-task-count', {
+    fetch('https://backend.bdedal.online/api/completed-task-count', {
         headers: {
             'Authorization': 'Bearer ' + token,
             'Accept': 'application/json'
@@ -92,7 +92,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             const token = localStorage.getItem('auth_token');
 
-            fetch('http://127.0.0.1:8000/api/pending-task-count', {
+            fetch('https://backend.bdedal.online/api/pending-task-count', {
               headers: {
                 'Authorization': 'Bearer ' + token,
                 'Accept': 'application/json'
@@ -114,7 +114,7 @@
             const token = localStorage.getItem('auth_token');
 
             // Fetch total tasks
-            fetch('http://127.0.0.1:8000/api/total-task-count', {
+            fetch('https://backend.bdedal.online/api/total-task-count', {
               headers: {
                 'Authorization': 'Bearer ' + token,
                 'Accept': 'application/json'

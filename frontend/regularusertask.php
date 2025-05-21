@@ -124,7 +124,7 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  fetch('http://127.0.0.1:8000/api/user-tasks', {
+  fetch('https://backend.bdedal.online/api/user-tasks', {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
@@ -201,7 +201,7 @@ document.addEventListener("DOMContentLoaded", function () {
     e.preventDefault();
     const formData = new FormData(this);
 
-    fetch('http://127.0.0.1:8000/api/submit-user-task', {
+    fetch('https://backend.bdedal.online/api/submit-user-task', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('auth_token')}`

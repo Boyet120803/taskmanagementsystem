@@ -71,7 +71,7 @@
     <script>
   document.addEventListener('DOMContentLoaded', function() {
   
-    fetch('http://127.0.0.1:8000/api/profile', {
+    fetch('https://backend.bdedal.online/api/profile', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,

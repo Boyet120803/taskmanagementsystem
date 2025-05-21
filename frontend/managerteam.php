@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Fetch available users
 function fetchAvailableUsers() {
-    fetch('http://127.0.0.1:8000/api/team-available-users', {
+    fetch('https://backend.bdedal.online/api/team-available-users', {
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         }
@@ -87,7 +87,7 @@ function fetchAvailableUsers() {
 
   // Fetch current team members
   function fetchTeamMembers() {
-      fetch('http://127.0.0.1:8000/api/team-members', {
+      fetch('https://backend.bdedal.online/api/team-members', {
           headers: {
               'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
           }
@@ -122,7 +122,7 @@ document.getElementById('assignToTeamBtn').addEventListener('click', function ()
         });
     }
 
-    fetch('http://127.0.0.1:8000/api/team-assign', {
+    fetch('https://backend.bdedal.online/api/team-assign', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
@@ -169,7 +169,7 @@ document.getElementById('assignToTeamBtn').addEventListener('click', function ()
         cancelButtonText: 'Cancel'
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch(`http://127.0.0.1:8000/api/team-remove/${userId}`, {
+            fetch(`https://backend.bdedal.online/api/team-remove/${userId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,

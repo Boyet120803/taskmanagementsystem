@@ -101,7 +101,7 @@
 
 <script>
   //users count
-  fetch('http://127.0.0.1:8000/api/getusers', 
+  fetch('https://backend.bdedal.online/api/getusers', 
   {
         headers: {
           'Authorization': 'Bearer ' + token,
@@ -121,7 +121,7 @@
 
 
    // Pending
-   fetch('http://127.0.0.1:8000/api/getpending', 
+   fetch('https://backend.bdedal.online/api/getpending', 
    {
         headers: {
           'Authorization': 'Bearer ' + token,
@@ -141,7 +141,7 @@
 
 
       // Completed
-      fetch('http://127.0.0.1:8000/api/getcompleted', 
+      fetch('https://backend.bdedal.online/api/getcompleted', 
     {
         headers: {
           'Authorization': 'Bearer ' + token,
@@ -160,7 +160,7 @@
     });
 
   // Total Tasks
-  fetch('http://127.0.0.1:8000/api/gettotaltask',
+  fetch('https://backend.bdedal.online/api/gettotaltask',
   {
       headers: {
       'Authorization': 'Bearer ' + token,

@@ -143,7 +143,7 @@ let teamMembers = [];
 
   // Fetch Team Members of this manager
   function fetchTeamMembers() {
-      fetch('http://127.0.0.1:8000/api/manager-team-members', {
+      fetch('https://backend.bdedal.online/api/manager-team-members', {
           headers: {
               'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
           }
@@ -159,7 +159,7 @@ let teamMembers = [];
 
         // Fetch Manager's Tasks
         function fetchManagerTasks() {
-            fetch('http://127.0.0.1:8000/api/managertasks', {
+            fetch('https://backend.bdedal.online/api/managertasks', {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
                 }
@@ -229,7 +229,7 @@ function assignTask(taskId) {
         return;
     }
 
-    fetch('http://127.0.0.1:8000/api/assign-task', {
+    fetch('https://backend.bdedal.online/api/assign-task', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -250,7 +250,7 @@ function assignTask(taskId) {
                 timer: 1500,
                 showConfirmButton: false
             });
-          fetch('http://127.0.0.1:8000/api/send-task-email', {
+          fetch('https://backend.bdedal.online/api/send-task-email', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -294,8 +294,8 @@ function viewSubmission(taskId, userId) {
   const modalTitle = document.getElementById('modalTitle');
   const token = localStorage.getItem('auth_token'); 
 
-  // Kunin ang pangalan ng user
-  fetch(`http://127.0.0.1:8000/api/user/${userId}`, {
+ 
+  fetch(`https://backend.bdedal.online/api/user/${userId}`, {
     headers: {
       'Authorization': 'Bearer ' + token,
       'Accept': 'application/json'
@@ -306,8 +306,8 @@ function viewSubmission(taskId, userId) {
     modalTitle.textContent = "Submission for details";
   });
 
-  // Kunin ang submission data
-  fetch(`http://127.0.0.1:8000/api/submission/${taskId}/${userId}`, {
+ 
+  fetch(`https://backend.bdedal.online/api/submission/${taskId}/${userId}`, {
     headers: {
       'Authorization': 'Bearer ' + token,
       'Accept': 'application/json'
@@ -386,7 +386,7 @@ function saveStatus(submissionId) {
     return;
   }
 
-  fetch(`http://127.0.0.1:8000/api/submissions/${submissionId}/update-status`, {
+  fetch(`https://backend.bdedal.online/api/submissions/${submissionId}/update-status`, {
     method: 'PUT',
     headers: {
       'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
