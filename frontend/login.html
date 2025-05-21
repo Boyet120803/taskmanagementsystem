@@ -85,7 +85,7 @@
               } else if (data.role === 2) {
                 window.location.href = 'regularuserdashboard.php';
               } else {
-                message.innerHTML = `<span class="text-danger">Unknown role.</span>`;
+                message.innerHTML = `<span class="text-danger">Unknown role: ${data.role}</span>`;
               }
             }, 1000);
           } else {
