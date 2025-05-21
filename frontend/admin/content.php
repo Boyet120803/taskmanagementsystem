@@ -11,7 +11,7 @@
   h5{
     font-size: 1rem;
   }
-   @media (min-width: 400px) and (max-width: 991px) {
+   @media (min-width: 340px) and (max-width: 991px) {
       .main-content{
         margin-top:120px;
       }

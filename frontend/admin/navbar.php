@@ -45,7 +45,7 @@
     }
 
 
-  @media (min-width: 400px) and (max-width: 991px) {
+  @media (min-width: 340px) and (max-width: 991px) {
   
     .sidebar {
       left: -250px;
