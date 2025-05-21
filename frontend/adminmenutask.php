@@ -254,7 +254,7 @@
   }
 
   // Fetch Users for Assigning Tasks
- function fetchUsers() {
+function fetchUsers() {
     const token = localStorage.getItem('auth_token');
     const userSelect = document.getElementById('addAssignedTo');
 
@@ -273,8 +273,17 @@
     .then(result => {
         console.log("Fetched users:", result);
 
-        userSelect.innerHTML = '<option value="" disabled selected>Select User</option>';
+        // Clear options first
+        userSelect.innerHTML = '';
 
+        // Add default option
+        const defaultOption = document.createElement('option');
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        defaultOption.textContent = 'Select User';
+        userSelect.appendChild(defaultOption);
+
+        // Append users
         result.forEach(user => {
             if (user.role === 1 || user.role === 2) {
                 const option = document.createElement('option');
