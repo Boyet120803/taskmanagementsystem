@@ -297,9 +297,11 @@ function fetchUsers() {
         console.error('Error fetching users:', error);
     });
 }
-
-// Call on page load
-document.addEventListener('DOMContentLoaded', fetchUsers);
+// Call fetchUsers() when modal is fully shown
+const addTaskModal = document.getElementById('addTaskModal');
+addTaskModal.addEventListener('shown.bs.modal', function () {
+    fetchUsers();
+});
 
 // Show Task Details
   function showTask(id) {
