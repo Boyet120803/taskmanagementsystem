@@ -158,7 +158,7 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
       <div class="col-md-3 mb-3">
         <strong style="color: #808080;">Profile Image:</strong><br>
-        <img src="http://127.0.0.1:8000/storage/${data.image}" alt="Profile Image" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;">
+       <img src="https://backend.bdedal.online/storage/${data.image}" alt="Profile Image" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;">
       </div>
     `;
 
