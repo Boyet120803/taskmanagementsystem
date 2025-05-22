@@ -254,7 +254,7 @@
         });
   }
 
-  function fetchUsers() {
+ function fetchUsers() {
     const token = localStorage.getItem('auth_token');
     const userSelect = document.getElementById('addAssignedTo');
     userSelect.innerHTML = '<option value="" disabled selected>Select a User</option>';
@@ -274,9 +274,10 @@
     })
     .then(users => {
         users.forEach(user => {
+            const role = Number(user.role); 
             const option = document.createElement('option');
             option.value = user.id;
-            option.textContent = `${user.fname} ${user.lname} (${user.role === 1 ? 'Manager' : 'User'})`;
+            option.textContent = `${user.fname} ${user.lname} (${role === 1 ? 'Manager' : 'User'})`;
             userSelect.appendChild(option);
         });
     })
@@ -284,7 +285,6 @@
         console.error('Error fetching users:', error);
     });
 }
-
 // Show Task Details
   function showTask(id) {
     const token = localStorage.getItem('auth_token');

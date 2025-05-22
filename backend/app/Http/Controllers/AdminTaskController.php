@@ -13,7 +13,7 @@ class AdminTaskController extends Controller
                 $query->latest()->limit(1);
             }])->get();
         
-            $formattedTasks = $tasks->map(function ($task) { //I-transform or i-modify ang matag item (task) sa collection.
+            $formattedTasks = $tasks->map(function ($task) { 
                 $latestSubmission = $task->submissions->first();
                 return [
                     'id' => $task->id,
