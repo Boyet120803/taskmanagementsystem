@@ -2,6 +2,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark">
   <div class="overlay" id="overlay"></div>
   <div class="container-fluid">
+
   <div class="ms-auto d-flex align-items-center">
     <button class="btn btn-outline-light d-lg-none me-2" id="sidebarToggle">
       <i class="fas fa-bars"></i>
@@ -45,7 +46,7 @@
 
 
   @media screen and (min-width: 360px) and (max-width: 811px) {
-  
+
     .sidebar {
       left: -250px;
       transition: left 0.3s ease;

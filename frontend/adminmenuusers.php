@@ -55,6 +55,8 @@
   .modal-footer .btn {
     width: 100%;
   }
+
+  
 }
 
 </style>

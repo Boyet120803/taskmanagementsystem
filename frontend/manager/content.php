@@ -10,6 +10,7 @@
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
   }
   @media screen and (min-width: 360px) and (max-width: 811px) {
+  
     .main-content{
       margin-top:120px;
     }
@@ -68,7 +69,7 @@
   </div>
 </div>
 
-<!-- JS to Fetch and Update Completed Tasks -->
+
 <script>
   // Completed Tasks Count
     fetch('https://backend.bdedal.online/api/completed-task-count', {

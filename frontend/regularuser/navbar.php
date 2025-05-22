@@ -61,7 +61,7 @@
     .navbar {
       left: 0 !important;
       width: 100% !important;
-      height:70px;
+      height:90px;
     }
 
     .main-content {

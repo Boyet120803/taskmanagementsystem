@@ -6,7 +6,7 @@
 <style>
   @media screen and (min-width: 360px) and (max-width: 811px) {
   .main-content{
-    margin-top:100px;
+    margin-top:70px;
   }
   .main-content .d-flex {
     flex-direction: column;
@@ -173,7 +173,7 @@
 <script>
   // Function to filter tasks on the frontend
  document.getElementById('taskSearchInput').addEventListener('input', function () {
-      const searchValue = this.value.toLowerCase(); // kunin ang input at gawing lowercase
+      const searchValue = this.value.toLowerCase();
       const rows = document.querySelectorAll('#taskTableBody tr');
 
       rows.forEach(row => {
@@ -254,36 +254,30 @@
         });
   }
 
-  // Fetch Users for Assigning Tasks
   function fetchUsers() {
     const token = localStorage.getItem('auth_token');
     const userSelect = document.getElementById('addAssignedTo');
+    userSelect.innerHTML = '<option value="" disabled selected>Select a User</option>';
 
     fetch('https://backend.bdedal.online/api/assignable-users', {
+        method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,
             'Accept': 'application/json'
         }
     })
     .then(response => {
-        console.log(response); 
         if (!response.ok) {
             throw new Error(`Failed to fetch users. Status: ${response.status}`);
         }
         return response.json();
     })
-      .then(result => {
-        console.log("Fetched users:", result);
-
-        userSelect.innerHTML = '<option value="" disabled selected>Select User</option>';
-
-        result.users.forEach(user => {
-            if (user.role === 1 || user.role === 2) {
-                const option = document.createElement('option');
-                option.value = user.id;
-                option.textContent = `${user.fname} ${user.lname} (${user.role === 1 ? 'Manager' : 'User'})`;
-                userSelect.appendChild(option);
-            }
+    .then(users => {
+        users.forEach(user => {
+            const option = document.createElement('option');
+            option.value = user.id;
+            option.textContent = `${user.fname} ${user.lname} (${user.role === 1 ? 'Manager' : 'User'})`;
+            userSelect.appendChild(option);
         });
     })
     .catch(error => {

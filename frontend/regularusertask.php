@@ -6,28 +6,28 @@
 <style>
 
   @media screen and (min-width: 360px) and (max-width: 811px) {
-      .table td, .table th {
-        white-space: nowrap;
-        font-size: 0.9rem;
-      }
-
-      .table-responsive {
-        overflow-x: auto;
-      }
-
-      .modal-content {
-        font-size: 0.9rem;
-      }
-
-      .btn {
-        font-size: 0.85rem;
-        padding: 5px 10px;
-      }
-
-      h3 {
-        font-size: 1.2rem;
-      }
+    .table td, .table th {
+      white-space: nowrap;
+      font-size: 0.9rem;
     }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    .modal-content {
+      font-size: 0.9rem;
+    }
+
+    .btn {
+      font-size: 0.85rem;
+      padding: 5px 10px;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+    }
+  }
 
   .btn-no-arrow::after {
   display: none !important;
