@@ -69,7 +69,7 @@
                 <option value="Female">Female</option>
               </select>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-6">
               <label for="editAddress" class="form-label text-muted">Address</label>
               <input type="text" class="form-control form-control-sm" id="editAddress">
             </div>
@@ -89,6 +89,10 @@
               <label for="editEmail" class="form-label text-muted">Email</label>
               <input type="email" class="form-control form-control-sm" id="editEmail">
             </div>
+           <div class="col-md-6">
+            <label for="editImage" class="form-label text-muted">Profile Image</label>
+            <input type="file" id="editImage" name="image" class="dropify small-dropify" data-allowed-file-extensions="jpg png jpeg" data-max-file-size="2M" />
+          </div>
           </div>
           <div class="text-end mt-4">
             <button type="submit" class="btn btn-sm btn-outline-primary px-4">Save</button>
@@ -100,7 +104,11 @@
 </div>
 
 
-
+<script>
+  $(document).ready(function() {
+    $('.dropify').dropify();
+  });
+</script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   fetch("https://backend.bdedal.online/api/userprofile", {
@@ -184,25 +192,29 @@ document.addEventListener("DOMContentLoaded", function () {
 document.getElementById("editProfileForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
-  const updatedData = {
-    fname: document.getElementById("editFname").value,
-    mname: document.getElementById("editMname").value,
-    lname: document.getElementById("editLname").value,
-    gender: document.getElementById("editGender").value,
-    address: document.getElementById("editAddress").value,
-    contact: document.getElementById("editContact").value,
-    birthdate: document.getElementById("editBirthdate").value,
-    age: document.getElementById("editAge").value,
-    email: document.getElementById("editEmail").value,
-  };
+  const formData = new FormData();
+
+  formData.append('fname', document.getElementById("editFname").value);
+  formData.append('mname', document.getElementById("editMname").value);
+  formData.append('lname', document.getElementById("editLname").value);
+  formData.append('gender', document.getElementById("editGender").value);
+  formData.append('address', document.getElementById("editAddress").value);
+  formData.append('contact', document.getElementById("editContact").value);
+  formData.append('birthdate', document.getElementById("editBirthdate").value);
+  formData.append('age', document.getElementById("editAge").value);
+  formData.append('email', document.getElementById("editEmail").value);
+
+  const imageFile = document.getElementById("editImage").files[0];
+  if (imageFile) {
+    formData.append('image', imageFile);
+  }
 
   fetch("https://backend.bdedal.online/api/updateprofile", {
-    method: "PUT",
+    method: "POST",
     headers: {
       "Authorization": `Bearer ${localStorage.getItem("auth_token")}`,
-      "Content-Type": "application/json",
     },
-    body: JSON.stringify(updatedData),
+    body: formData,
   })
   .then(response => response.json())
   .then(data => {
@@ -213,13 +225,10 @@ document.getElementById("editProfileForm").addEventListener("submit", function (
       confirmButtonColor: '#3085d6',
       confirmButtonText: 'OK'
     }).then(() => {
-  
       const modalEl = document.getElementById('editProfileModal');
       const modalInstance = bootstrap.Modal.getInstance(modalEl);
       modalInstance.hide();
-
-    
-      location.reload(); 
+      location.reload();
     });
   })
   .catch(error => {

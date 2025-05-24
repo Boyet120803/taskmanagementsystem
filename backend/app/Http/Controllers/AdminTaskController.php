@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\User;
+use App\Models\TaskSubmission;
 use Illuminate\Http\Request;
 
 class AdminTaskController extends Controller
@@ -13,7 +14,7 @@ class AdminTaskController extends Controller
                 $query->latest()->limit(1);
             }])->get();
         
-            $formattedTasks = $tasks->map(function ($task) { 
+            $formattedTasks = $tasks->map(function ($task) {  // ang map I-transform or i-format ang kada task 
                 $latestSubmission = $task->submissions->first();
                 return [
                     'id' => $task->id,
@@ -132,6 +133,28 @@ class AdminTaskController extends Controller
             return response()->json($users);
         }
 
+         public function getAssignableUsersfordropdown()
+        {
+            $users = User::whereIn('role', [1, 2])->get();
+            return response()->json($users);
+        }
+
+
+
+        public function getReports()
+        {
+            $totalTasks = TaskSubmission::count();
+            $pending = TaskSubmission::where('status', 'Pending')->count();
+            $inProgress = TaskSubmission::where('status', 'In Progress')->count();
+            $completed = TaskSubmission::where('status', 'Completed')->count();
+
+            return response()->json([
+                'total_tasks' => $totalTasks,
+                'pending' => $pending,
+                'in_progress' => $inProgress,
+                'completed' => $completed
+            ]);
+        }
 
 
 }

@@ -27,43 +27,43 @@
     h3 {
       font-size: 1.2rem;
     }
-  }
-
-  .btn-no-arrow::after {
-  display: none !important;
-}
-
-  .dropdown button{
-    background-color: transparent;
-    border: none;
-    color: black;
-    padding: 3px 10px;
-    font-size: 1rem;
-    cursor: pointer;
-  }
- .dropdown button:hover{
-  background:white;
- }
- 
- @media print {
-    body * {
-      visibility: hidden;
     }
 
-    .printable-table, .printable-table * {
-      visibility: visible;
-    }
-
-    .printable-table {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-    }
-
-    .btn, .dropdown, .modal {
+      .btn-no-arrow::after {
       display: none !important;
     }
+
+    .dropdown button{
+      background-color: transparent;
+      border: none;
+      color: black;
+      padding: 3px 10px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  .dropdown button:hover{
+    background:white;
+  }
+  
+  @media print {
+      body * {
+        visibility: hidden;
+      }
+
+      .printable-table, .printable-table * {
+        visibility: visible;
+      }
+
+      .printable-table {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+      }
+
+      .btn, .dropdown, .modal {
+        display: none !important;
+      }
   }
 
 </style>

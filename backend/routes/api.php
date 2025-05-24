@@ -8,6 +8,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminTaskController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\AccessTokenController;
+use App\Http\Controllers\SampleController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -15,8 +18,8 @@ Route::get('/user', function (Request $request) {
 
  Route::post('/login', [AdminController::class, 'login']);
  Route::post('/register', [AdminController::class, 'register']);
-
-
+ Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink']);
+ Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword']);
 
 
 Route::middleware(['auth:sanctum', 'role:0'])->group(function() {
@@ -34,11 +37,13 @@ Route::middleware(['auth:sanctum', 'role:0'])->group(function() {
     Route::post('/logout', [AdminTaskController::class, 'logout']);
     Route::post('/assign-task', [AdminTaskController::class, 'assignTask']);
     Route::get('/assignable-users', [AdminTaskController::class, 'getAssignableUsers']);
+    Route::get('/assignableusersfordropdown', [AdminTaskController::class, 'getAssignableUsersfordropdown']);
     Route::get('/profile', [AdminController::class, 'profile']);
     Route::get('/getusers', [AdminController::class, 'getUsers']);
     Route::get('/getpending', [AdminController::class, 'getPendingTaskCount']);
     Route::get('/getcompleted', [AdminController::class, 'getCompleteTaskCount']);
     Route::get('/gettotaltask', [AdminController::class, 'getTotalTaskCount']);
+    Route::get('/adminreports', [AdminTaskController::class, 'getReports']);
 });
 
 
@@ -61,7 +66,7 @@ Route::middleware(['auth:sanctum', 'role:1'])->group(function() {
     Route::get('/completed-task-count', [ManagerController::class, 'getCompletedTaskCount']);
     Route::get('/pending-task-count', [ManagerController::class, 'getPendingTaskCount']);
     Route::get('/total-task-count', [ManagerController::class, 'getTotalTaskCount']);
-
+    Route::get('/reports', [ManagerController::class, 'getReports']);
     Route::post('/send-task-email', [MailController::class, 'sendTaskMail']);
 });
 
@@ -72,8 +77,13 @@ Route::middleware(['auth:sanctum', 'role:2'])->group(function() {
     Route::get('/profile', [UserController::class, 'profile']);
     Route::get('/user-tasks', [UserController::class, 'userTasks']);
     Route::get('/userprofile', [UserController::class, 'userprofile']);
-    Route::put('/updateprofile', [UserController::class, 'update']);
+    Route::post('/updateprofile', [UserController::class, 'update']);
     Route::post('/submit-user-task', [UserController::class, 'submit']);
 
 });
 
+
+Route::middleware('access_tokens')->group(function(){
+    Route::get('/index',[AccessTokenController::class,'index']);
+    Route::get('/sample',[SampleController::class,'sample']);
+});

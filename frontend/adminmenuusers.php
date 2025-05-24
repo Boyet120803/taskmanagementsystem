@@ -270,9 +270,9 @@
         rows.forEach(row => {
           const rowText = row.textContent.toLowerCase(); // kunin lahat ng text sa row
           if (rowText.includes(searchValue)) {
-            row.style.display = ''; // show row
+            row.style.display = '';
           } else {
-            row.style.display = 'none'; // hide row
+            row.style.display = 'none'; 
           }
        });
     });
@@ -315,7 +315,7 @@
                   <td>${getRoleName(user.role)}</td>
                   <td>
                   <button class="btn btn-warning btn-sm" onclick='editUser(${JSON.stringify(user)})' title="Edit">
-                      <i class="bi bi-pencil"></i>
+                      <i class="bi bi-pencil-square"></i>
                   </button>
                     <button class="btn btn-info btn-sm" onclick="showUser(${user.id})" title="Show">
                         <i class="bi bi-eye"></i>

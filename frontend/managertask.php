@@ -53,7 +53,6 @@
   <div class="container mt-1">
     <div class="d-flex justify-content-between align-items-center">
       <h4 class="mb-2" style="color: #808080;">Task</h4>
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTaskModal">Add Task</button>
     </div>
 
     <table class="table mt-4" id="taskTable">
@@ -73,41 +72,7 @@
 </div>
 
 
-<!-- Add Task Modal -->
-<div class="modal fade" id="addTaskModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content bg-dark text-light">
-      <div class="modal-header">
-        <h5 class="modal-title">Add Task</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <form id="addTaskForm">
-          <div class="mb-3">
-            <label for="taskTitle" class="form-label">Title</label>
-            <input type="text" class="form-control" id="taskTitle" placeholder="Enter task title">
-          </div>
-          <div class="mb-3">
-            <label for="taskDescription" class="form-label">Description</label>
-            <textarea class="form-control" id="taskDescription" rows="3" placeholder="Enter task description"></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="assignTo" class="form-label">Assign To</label>
-            <select class="form-select" id="assignTo">
-              <option selected disabled>-- Select User --</option>
-              <!-- Populate options dynamically via JS if needed -->
-            </select>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <!-- Wala pa tong functionality -->
-        <button type="button" class="btn btn-primary">Save Task</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
+
 
 <!-- View Submission Modal -->
 <div class="modal fade" id="viewSubmissionModal" tabindex="-1" aria-hidden="true">
@@ -138,12 +103,13 @@
 
 
 
+
 <script>
 let teamMembers = [];
 
   // Fetch Team Members of this manager
   function fetchTeamMembers() {
-      fetch('https://backend.bdedal.online/api/manager-team-members', {
+      fetch('http:https://backend.bdedal.online/api/manager-team-members', {
           headers: {
               'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
           }
@@ -325,13 +291,10 @@ function viewSubmission(taskId, userId) {
         </tr>
       `;
     } else {
-      // I-check kung may file
       let fileButton = '<span class="text-muted">No file</span>';
       if (submission.file_path) {
         fileButton = '<a href="http://127.0.0.1:8000/storage/' + submission.file_path + '" target="_blank" class="btn btn-sm btn-success">View File</a>';
       }
-
-      // Ipakita ang row ng submission
       tbody.innerHTML = `
       <tr>
         <td>${submission.notes || 'None'}</td>
@@ -422,13 +385,6 @@ function toggleReasonField() {
     reasonField.value = '';
   }
 }
-
-
-
-
-
-
-
 
 
 

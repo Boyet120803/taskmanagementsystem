@@ -98,9 +98,8 @@ class UserController extends Controller
     public function update(Request $request)
     {
        
-        $user = auth()->user();
-    
-      
+       $user = auth()->user();
+
         $validated = $request->validate([
             'fname' => 'required|string|max:255',
             'mname' => 'nullable|string|max:255',
@@ -111,13 +110,18 @@ class UserController extends Controller
             'birthdate' => 'required|date',
             'age' => 'required|integer|min:0',
             'email' => 'required|email|max:255',
-            
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // image validation
         ]);
-    
-       
+
+        if ($request->hasFile('image')) {
+            // Optional: delete old image here if you want
+
+            $imagePath = $request->file('image')->store('uploads', 'public'); 
+            $validated['image'] = $imagePath;
+        }
+
         $user->update($validated);
-    
-      
+
         return response()->json([
             'message' => 'Profile updated successfully',
             'user' => $user,

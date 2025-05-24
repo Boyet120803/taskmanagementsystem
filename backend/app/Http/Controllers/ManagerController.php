@@ -45,7 +45,7 @@ class ManagerController extends Controller
             $manager_id = Auth::id();
         
             $tasks = Task::where('assign_to', $manager_id)
-                ->with(['taskAssignments.user']) // isama ang assigned users
+                ->with(['taskAssignments.user'])
                 ->get();
             return response()->json($tasks);
         }
@@ -191,6 +191,35 @@ class ManagerController extends Controller
                         
                             return response()->json(['total_count' => $totalCount]);
                         }
-                
+
+
+             public function getReports(Request $request)
+             {
+                $managerId = Auth::id();
+                $teamMembers = TeamMember::where('manager_id', $managerId)->get();
+
+                $userIds = [];
+                foreach ($teamMembers as $member) {
+                    $userIds[] = $member->user_id;
+                }
+
+                $totalTasks = TaskSubmission::whereIn('user_id', $userIds)->count();
+                $pending = TaskSubmission::whereIn('user_id', $userIds)
+                        ->where('status', 'Pending')->count();
+                $inProgress = TaskSubmission::whereIn('user_id', $userIds)
+                            ->where('status', 'In Progress')->count();
+                $completed = TaskSubmission::whereIn('user_id', $userIds)
+                            ->where('status', 'Completed')->count();
+
+                return response()->json([
+                    'total_tasks' => $totalTasks,
+                    'pending' => $pending,
+                    'in_progress' => $inProgress,
+                    'completed' => $completed
+                ]);
+             }
+
+          
+
                 
 }

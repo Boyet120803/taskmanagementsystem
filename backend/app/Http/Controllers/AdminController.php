@@ -19,7 +19,7 @@ class AdminController extends Controller
 
         public function login(Request $request)
         {
-            if (Auth::attempt([
+            if (Auth::attempt([ // Auth built-in nga security system sa Laravel 
                 'email' => $request->email,
                 'password' => $request->password,
             ])) {
@@ -152,7 +152,7 @@ class AdminController extends Controller
             $users = User::whereIn('role', [1, 2])->get();
             return response()->json([
                 'status' => 'success',
-                'total_users' => $users->count(), // <-- ito ang kulang
+                'total_users' => $users->count(), 
                 'users' => $users,
             ]);
         }

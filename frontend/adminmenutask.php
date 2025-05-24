@@ -171,7 +171,7 @@
 
 
 <script>
-  // Function to filter tasks on the frontend
+
  document.getElementById('taskSearchInput').addEventListener('input', function () {
       const searchValue = this.value.toLowerCase();
       const rows = document.querySelectorAll('#taskTableBody tr');
@@ -179,9 +179,9 @@
       rows.forEach(row => {
         const rowText = row.textContent.toLowerCase();
         if (rowText.includes(searchValue)) {
-          row.style.display = ''; // show
+          row.style.display = ''; 
         } else {
-          row.style.display = 'none'; // hide
+          row.style.display = 'none'; 
         }
       });
   });
@@ -285,6 +285,7 @@
         console.error('Error fetching users:', error);
     });
 }
+
 // Show Task Details
   function showTask(id) {
     const token = localStorage.getItem('auth_token');
@@ -326,7 +327,7 @@ function editTask(id) {
     document.getElementById('editDueDate').value = task.due_date || '';
 
    // Fetch users for dropdown
-    fetch('https://backend.bdedal.online/api/assignable-users', {
+    fetch('https://backend.bdedal.online/api/assignableusersfordropdown', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json'
