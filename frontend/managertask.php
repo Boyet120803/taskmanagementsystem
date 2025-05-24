@@ -109,7 +109,7 @@ let teamMembers = [];
 
   // Fetch Team Members of this manager
   function fetchTeamMembers() {
-      fetch('http:https://backend.bdedal.online/api/manager-team-members', {
+      fetch('https://backend.bdedal.online/api/manager-team-members', {
           headers: {
               'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
           }
