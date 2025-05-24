@@ -326,7 +326,7 @@ function editTask(id) {
     document.getElementById('editTaskDesc').value = task.description;
     document.getElementById('editDueDate').value = task.due_date || '';
 
-   // Fetch users for dropdown
+      // Fetch users for dropdown sa edit form
     fetch('https://backend.bdedal.online/api/assignableusersfordropdown', {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -349,7 +349,6 @@ function editTask(id) {
         }
       });
     });
-
     $('#editTaskModal').modal('show');
   });
 }
