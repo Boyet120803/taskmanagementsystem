@@ -326,29 +326,41 @@ function editTask(id) {
     document.getElementById('editTaskDesc').value = task.description;
     document.getElementById('editDueDate').value = task.due_date || '';
 
-      // Fetch users for dropdown sa edit form
+  function fetchUsersForEdit(task) {
+    const token = localStorage.getItem('auth_token');
+    const assignSelect = document.getElementById('editAssignedTo');
+    assignSelect.innerHTML = '<option value="" disabled selected>Select a User</option>';
+
     fetch('https://backend.bdedal.online/api/assignableusersfordropdown', {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json'
-      }
-    })
-    .then(res => res.json())
-    .then(users => {
-      const assignSelect = document.getElementById('editAssignedTo');
-      assignSelect.innerHTML = '';
-      users.forEach(user => {
-        if (user.role === 1 || user.role === 2) {
-          const option = document.createElement('option');
-          option.value = user.id;
-          option.textContent = `${user.fname} ${user.lname} (${user.role === 1 ? 'Manager' : 'User'})`;
-          if (user.id === task.assigned_to) {
-            option.selected = true;
-          }
-          assignSelect.appendChild(option);
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json'
         }
-      });
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Failed to fetch users. Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(users => {
+        users.forEach(user => {
+            if (user.role === 1 || user.role === 2) {
+                const option = document.createElement('option');
+                option.value = user.id;
+                option.textContent = `${user.fname} ${user.lname} (${user.role === 1 ? 'Manager' : 'User'})`;
+                if (user.id === task.assigned_to) {
+                    option.selected = true;
+                }
+                assignSelect.appendChild(option);
+            }
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching users:', error);
     });
+}
     $('#editTaskModal').modal('show');
   });
 }
